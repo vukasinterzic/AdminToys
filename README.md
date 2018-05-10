@@ -1,5 +1,5 @@
 # AdminToolBox
-This is the place where i will keep a code for my Tool Box PowerShell module.
+This is the place where I keep the code for my AdminToolBox PowerShell module.
 
 Module contains bunch of functions that are helping with everyday taks.
 
