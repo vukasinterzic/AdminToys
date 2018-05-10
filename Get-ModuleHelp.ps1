@@ -47,14 +47,16 @@ function Get-ModuleHelp {
         [string]$Module = "AdminToolBox"
     )
 
+    #get name of each command
     $commands = Get-Command -Module $Module | Select-Object -ExpandProperty Name
 
     $n = 1
 
+    #create ordered hashtable to store functions from module
     $matchHash = [ordered]@{}
 
+    #fill hashtable with command names
     $commands | ForEach-Object { $matchHash.Add($n++, "$_") }
-    #$commands | % { $matchHash[$matchHash.Count]=@("$_") }
 
     $selection = ""
     Write-Host -ForegroundColor Green "Hi there. Thank you for using this module.
@@ -73,14 +75,13 @@ function Get-ModuleHelp {
 
     Write-Host -ForegroundColor Yellow "List of all custom functions that are included in this module:"
 
+    #write list of all commands in module
     foreach ($ln in $matchHash.GetEnumerator()) {
         if ($ln.Name % 2 -eq 0) {
-            #$host.UI.RawUI.ForegroundColor = "Cyan"
-            write-host -ForegroundColor Green "$($ln.Name) $($ln.Value)"
+            write-host -ForegroundColor Green "$($ln.Name) $($ln.Value)" #line with even numbers will be green
         }
         elseif ($ln.Name % 2 -eq 1) {
-            #$host.UI.RawUI.ForegroundColor = "White"
-            write-host -ForegroundColor White "$($ln.Name) $($ln.Value)"
+            write-host -ForegroundColor White "$($ln.Name) $($ln.Value)" #line with odd numbers will be white
         }
     }
 
@@ -88,29 +89,28 @@ function Get-ModuleHelp {
 
     Write-Output `r`n
 
-    while ($selection -ne "Q") {
+    while ($selection -ne "Q") { #runs untill you enter Q
 
         If ($matchHash.Keys -match $selection) {
 
             foreach ($line in $matchHash.GetEnumerator()) {
     
                 if ($selection -eq $line.Name) {
-                    Get-Help -Name $line.Value -Full
+                    Get-Help -Name $line.Value -Full #get -Full help for command
                 }
             }
         }
-        elseif ($selection -eq "L") {
+        elseif ($selection -eq "L") { #entering L will list all commands again.
             Write-Output `r`n    
             Write-Host -ForegroundColor Yellow "List of all included Functions:"
 
+            #write list of all commands in module
             foreach ($ln in $matchHash.GetEnumerator()) {
                 if ($ln.Name % 2 -eq 0) {
-                    #$host.UI.RawUI.ForegroundColor = "Cyan"
-                    Write-Host -ForegroundColor Green "$($ln.Name) $($ln.Value)"
+                    write-host -ForegroundColor Green "$($ln.Name) $($ln.Value)" #line with even numbers will be green
                 }
                 elseif ($ln.Name % 2 -eq 1) {
-                    #$host.UI.RawUI.ForegroundColor = "White"
-                    write-host -ForegroundColor White "$($ln.Name) $($ln.Value)"
+                    write-host -ForegroundColor White "$($ln.Name) $($ln.Value)" #line with odd numbers will be white
                 }
             }
 
@@ -123,6 +123,7 @@ function Get-ModuleHelp {
             $selection = ""
         }
 
+        #multi color one line message
         Write-Host -ForegroundColor Green "Enter " -NoNewline
         Write-Host -ForegroundColor Yellow "'cmdlet number'" -NoNewline
         Write-Host -ForegroundColor Green " to show it's help page. " -NoNewline
@@ -130,9 +131,8 @@ function Get-ModuleHelp {
         Write-Host -ForegroundColor Green " for listing all functions again. Enter " -NoNewline
         Write-Host -ForegroundColor Yellow "'Q'" -NoNewline
         Write-Host -ForegroundColor Green " to quit this function: " -NoNewline
-        $selection = Read-Host
+        $selection = Read-Host #read user input
         
     }
-
 
 }
