@@ -14,3 +14,6 @@ This function can be used with any module.
 
 #### Get-DiskSpace
 Collect basic disk information from local and remote computers and export it to CSV.
+
+#### New-DNSRecord
+Create new A DNS record in AD integrated DNS zone using dnscmd tool.
