@@ -17,3 +17,6 @@ Collect basic disk information from local and remote computers and export it to 
 
 #### New-DNSRecord
 Create new A DNS record in AD integrated DNS zone using dnscmd tool.
+
+#### Get-LocalAdmins
+Get list of users and groups with local admin rights on local or remote computer. Export to CSV if needed.
