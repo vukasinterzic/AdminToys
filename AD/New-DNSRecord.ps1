@@ -155,3 +155,13 @@ foreach ($record in $records) {
 }
 
 #>
+
+
+<#
+To Do:
+
+Creation of other record types
+Make Log not to be mandatory
+Make CSV preparation function, that will pre-create input file. User can then add information in Excel and run creation in bulk
+
+#>
