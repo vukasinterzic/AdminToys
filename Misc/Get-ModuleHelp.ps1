@@ -89,7 +89,8 @@ function Get-ModuleHelp {
 
     Write-Output `r`n
 
-    while ($selection -ne "Q") { #runs untill you enter Q
+    while ($selection -ne "Q") {
+        #runs untill you enter Q
 
         If ($matchHash.Keys -match $selection) {
 
@@ -100,7 +101,8 @@ function Get-ModuleHelp {
                 }
             }
         }
-        elseif ($selection -eq "L") { #entering L will list all commands again.
+        elseif ($selection -eq "L") {
+            #entering L will list all commands again.
             Write-Output `r`n    
             Write-Host -ForegroundColor Yellow "List of all included Functions:"
 
