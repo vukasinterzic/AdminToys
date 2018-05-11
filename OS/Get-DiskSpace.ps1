@@ -41,7 +41,7 @@ C:\PS> computerlist.txt | Get-DiskSpace
 
 .LINK
 
-http://www.vukasinterzic.com
+https://github.com/vukasinterzic/AdminToolBox
 
 #>
 
@@ -86,28 +86,30 @@ function Get-DiskSpace {
 
         $sizeDivide = "1" + $SizeIn
 
-        # Computer loop
+        # Computers loop
         foreach ($Computer in $Computers) {
 
             Try {
+
                 $allDisks = Get-WmiObject -Class Win32_LogicalDisk -ComputerName $Computer -ErrorAction Stop |
                     Select-Object @{n = "ComputerName"; e = {$_.PSCOmputerName}},
-                @{n = "Type"; e = {$typeHash.item([int]$_.DriveType)}},
-                ProviderName, DeviceID, VolumeName,
-                @{n = "Size($SizeIn)"; e = {"{0:N2}" -f ($_.Size / $sizeDivide)}},
-                @{n = "FreeSpace($SizeIn)"; e = {"{0:N2}" -f ($_.FreeSpace / $sizeDivide)}},
-                @{n = "UsedSpace($SizeIn)"; e = {"{0:N2}" -f (($_.Size - $_.FreeSpace) / $sizeDivide)}}
+                    @{n = "Type"; e = {$typeHash.item([int]$_.DriveType)}},
+                    @{n = "NetworkPath"; e = {$_.ProviderName}},
+                    DeviceID, VolumeName,
+                    @{n = "Size($SizeIn)"; e = {"{0:N2}" -f ($_.Size / $sizeDivide)}},
+                    @{n = "FreeSpace($SizeIn)"; e = {"{0:N2}" -f ($_.FreeSpace / $sizeDivide)}},
+                    @{n = "UsedSpace($SizeIn)"; e = {"{0:N2}" -f (($_.Size - $_.FreeSpace) / $sizeDivide)}}
 
-                #show results:    
-                Write-Host -ForegroundColor Yellow "Disks information for computer " -NoNewline
-                Write-Host -ForegroundColor Green  "$Computer" -NoNewline
-                Write-Host -ForegroundColor Yellow ":"
+                    #show results:    
+                    Write-Host -ForegroundColor Yellow "Disks information for computer " -NoNewline
+                    Write-Host -ForegroundColor Green  "$Computer" -NoNewline
+                    Write-Host -ForegroundColor Yellow ":"
     
-                $allDisks | Format-Table -AutoSize
+                    $allDisks | Format-Table -AutoSize
 
-                if ($ExportPath) {
-                    $allDisks | Export-Csv -Path $ExportPath -Delimiter ";" -NoTypeInformation -Append
-                }
+                    if ($ExportPath) {
+                        $allDisks | Export-Csv -Path $ExportPath -Delimiter ";" -NoTypeInformation -Append
+                    }
     
             }
             
@@ -119,6 +121,7 @@ function Get-DiskSpace {
                 Write-Host ""
                 Write-Host -ForegroundColor Red $($_.Exception.message)
                 Write-Host ""
+            
             } 
 
         } #end of Computers loop
@@ -129,9 +132,8 @@ function Get-DiskSpace {
 
 } #end of Get-DiskSpace
 
-<#
+    <#
 To Do:
-
 Add error detection and verbose
 Add SUM for each individual server
 

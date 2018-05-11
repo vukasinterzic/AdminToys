@@ -1,7 +1,7 @@
 # AdminToolBox
 This is the place where I keep the code for my AdminToolBox PowerShell module.
 
-Module contains bunch of functions that are helping with everyday taks.
+Module contains bunch of functions that are helping with everyday taks. Functions are saved in individual folders and they are fetched inside psm1 file.
 
 
 ## Functions:
