@@ -11,3 +11,6 @@ This function was written to simplify using this module.
 It loads all commands in module and shows them with numbers. Then you can enter function number and it will show you full help for that command.
 
 This function can be used with any module.
+
+#### Get-DiskSpace
+Collect basic disk information from local and remote computers and export it to CSV.
