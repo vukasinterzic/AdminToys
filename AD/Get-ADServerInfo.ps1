@@ -83,10 +83,12 @@ function Get-ADServerInfo {
         [switch]$ImportLastFile
     )
 
+    
+    Write-Verbose "Start of function Get-ADServerInfo."
 
     if (!$ImportPath) {
-        Write-Verbose "ImportPath set is not used."
-        Write-Verbose "Getting user credentials ..."
+        Write-Verbose "Parameter Set ExportPath is used."
+        Write-Verbose "Getting user credentials..."
         $credentials = Get-Credential
         $global:onlineServers = @()
         $global:offlineServers = @()
@@ -182,7 +184,7 @@ function Get-ADServerInfo {
         # Export results to CSV if $ExportPath is specified
         if ($ExportPath) {
             $timeStamp = Get-Date -f yyyy-MM-dd_HH-mm
-            
+
             Write-Verbose "ExportPath is selected. Results will be exported to CSV file."
             Write-Verbose "Testing if provided path is file or directory..."
 
