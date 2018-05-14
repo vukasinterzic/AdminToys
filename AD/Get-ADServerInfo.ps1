@@ -84,7 +84,7 @@ function Get-ADServerInfo {
     )
 
     
-    Write-Verbose "Start of function Get-ADServerInfo."
+    Write-Verbose "Start of function Get-ADServerInfo $(Get-Date -Format g)."
 
     if (!$ImportPath) {
         Write-Verbose "Parameter Set ExportPath is used."
@@ -111,9 +111,9 @@ function Get-ADServerInfo {
             $i++
             Write-Host -ForegroundColor DarkGray "Proceeding with server $($Server) - $i/$($Servers.Count)"
 
-            $Server = Get-ADComputer -Server $Domain -Identity $Server -Credential $credentials -Properties Name, DNSHostName, IPv4Address, OperatingSystem, Description | Select-Object Name, DNSHostName, IPv4Address, OperatingSystem, Description
+            if (Test-Connection $Server -Quiet -Count 1) {
 
-            if (Test-Connection $Server.DNSHostName -Quiet -Count 1) {
+                $Server = Get-ADComputer -Server $Domain -Identity $Server -Credential $credentials -Properties Name, DNSHostName, IPv4Address, OperatingSystem, Description | Select-Object Name, DNSHostName, IPv4Address, OperatingSystem, Description
 
                 Write-Verbose "Getting NetBIOS name of server..."
                 $netBIOSName = (Get-ADDOmain -Server $Domain -Credential $credentials).NetBIOSName
@@ -160,11 +160,12 @@ function Get-ADServerInfo {
 
             }
             else {
-                Write-Verbose "Server $($Server.Name) is offline and it was added to the list of offline servers."
-                $global:offlineServers += $Server.Name
+                Write-Verbose "Server $Server is offline or it does no exist. Server name was added to the list of unavailable servers."
+                $global:offlineServers += $Server
             
             }
 
+            Write-Verbose "Processing of server $i/$($Servers.Count) completed at $(Get-Date -Format g)."
         }
 
         #Display Results
@@ -175,7 +176,7 @@ function Get-ADServerInfo {
 
 
         if ($offlineServers.Count -gt 0) {
-            Write-Host "Number of inaccessible servers is >0."
+            Write-Verbose "Number of inaccessible servers is >0."
             Write-Host -ForegroundColor Magenta "Offline servers list:"    
             $offlineServers
 
@@ -265,5 +266,5 @@ function Get-ADServerInfo {
 
     } # End of Import
 
-    Write-Verbose "End of Function Get-ADServerInfo"
+    Write-Verbose "End of Function Get-ADServerInfo $(Get-Date -Format g)."
 } # End of Get-ADServerInfo
