@@ -54,13 +54,15 @@ function Get-LocalAdmins {
             ValueFromPipelineByPropertyName = $true)]
         [string]$ExportPath = ""    
     )  
-  
+
+    $credentials = Get-Credential
+
     # Computers loop
     foreach ($Computer in $Computers) {
 
         Try {
     
-            $admins = Get-WmiObject -ClassName win32_GroupUser –ComputerName $Computer -ErrorAction Stop
+            $admins = Get-WmiObject -ClassName win32_GroupUser –ComputerName $Computer -Credential $credentials -ErrorAction Stop
             $admins = $admins | Where-Object {$_.groupcomponent –like '*"Administrators"'}
   
             #trim unneccessary informaiton
