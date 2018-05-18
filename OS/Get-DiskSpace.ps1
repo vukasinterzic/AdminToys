@@ -50,8 +50,8 @@ function Get-DiskSpace {
         
         [Parameter(ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true)]
-        [ValidateSet("MB", "GB", "TB")]
-        [string]$SizeIn = "GB",
+        [ValidateSet("Bytes", "KB", "MB", "GB", "TB")]
+        [string]$SizeIn = "Bytes",
 
         [Parameter(ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true)]
@@ -76,7 +76,12 @@ function Get-DiskSpace {
 
         }
 
-        $sizeDivide = "1" + $SizeIn
+        if ($sizeIn -eq "Bytes") { 
+            $sizeDivide = "1"
+        }
+        else { 
+            $sizeDivide = "1$sizeIn"
+        }
         
         if ($UseCredentials) {
             Write-Verbose "Parameter UseCredentials is used. Getting user credentials..."
@@ -148,7 +153,7 @@ function Get-DiskSpace {
 
     end {
         if ($credentials) {Clear-Variable credentials}
-        
+
         Write-Verbose "End of Get-DiskSpace function."
     }
 
