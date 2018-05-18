@@ -100,7 +100,7 @@ function Get-ADServerInfo {
 
         #list of servers, excluding Cluster CNO
         if (!$Servers) {
-            Write-Verbose -ForegroundColor Cyan "Server list not specified. Getting all servers in AD domain..."
+            Write-Host -ForegroundColor Cyan "Server list not specified. Getting all servers in AD domain..."
             $Servers = Get-ADComputer -Server $Domain -Credential $credentials -filter {(OperatingSystem -like "*Server*") -and ((Description -notlike "*") -or (Description -notlike "*Failover cluster virtual network name account*"))} -Properties Name | Select-Object -ExpandProperty Name
         }
 
