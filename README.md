@@ -23,3 +23,6 @@ Get list of users and groups with local admin rights on local or remote computer
 
 #### Get-ADServersInfo
 Collect basic information about specified servers or all servers found in Active Directory. Collected information is useful for having basic overview of where they are, what systems are they running and what are they used for.
+
+#### StampFile
+Add date and time stamp to end of file name. You can use it to rename existing file or copy file with date and time added to the end of original name.
