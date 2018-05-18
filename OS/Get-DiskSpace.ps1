@@ -147,7 +147,8 @@ function Get-DiskSpace {
     } #end of Process
 
     end {
-        Clear-Variable credentials
+        if ($credentials) {Clear-Variable credentials}
+        
         Write-Verbose "End of Get-DiskSpace function."
     }
 
