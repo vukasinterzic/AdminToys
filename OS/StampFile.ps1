@@ -55,7 +55,7 @@ function StampFile {
                 Write-Host -ForegroundColor Magenta "File $fileName is not found."
             }
             else {
-                Write-Host -ForegroundColor Cyan "Original file name: $fileName"
+                Write-Host -ForegroundColor Cyan "Original file: $fileName"
                 
                 $fileObj = Get-Item $fileName
                 Write-Verbose "Getting date and time stamp..."
@@ -69,8 +69,9 @@ function StampFile {
     
                     Write-Verbose "File doesn't have extension."
                     if ($KeepOriginal) {
-                        Write-Verbose "KeepOriginal switch was selected. Creating new file..."
-                        New-Item -ItemType File -Name "$nameOnly-$dateStamp"
+                        Write-Verbose "KeepOriginal switch was selected. Copying file..."
+                        $filePath = Split-Path $fileObj -Parent
+                        Copy-Item $fileObj -Destination "$filePath`\$nameOnly-$dateStamp$extOnly"
                         Write-Host -ForegroundColor Green "New file name: $nameOnly-$dateStamp"
                     }
                     else {
@@ -85,8 +86,9 @@ function StampFile {
                     $nameOnly = $fileObj.Name.Replace( $fileObj.Extension, '')
                     
                     if ($KeepOriginal) {
-                        Write-Verbose "KeepOriginal switch was selected. Creating new file..."
-                        New-Item -ItemType File -Name "$nameOnly-$dateStamp$extOnly"
+                        Write-Verbose "KeepOriginal switch was selected. Copying file ..."
+                        $filePath = Split-Path $fileObj -Parent
+                        Copy-Item $fileObj -Destination "$filePath`\$nameOnly-$dateStamp$extOnly"
                         Write-Host -ForegroundColor Green "New file name: $nameOnly-$dateStamp$extOnly"
                     }
                     else {
