@@ -59,7 +59,7 @@ function Get-DiskSpace {
         
         [Parameter(ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true)]
-        [string]$ExportPath = ""
+        [string]$ExportPath
     
     )
 
