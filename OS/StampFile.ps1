@@ -57,44 +57,44 @@ function StampFile {
             else {
                 Write-Host -ForegroundColor Cyan "Original file: $fileName"
                 
-                $fileObj = Get-Item $fileName
+                $obj = Get-Item $fileName
                 Write-Verbose "Getting date and time stamp..."
-                $dateStamp = Get-Date -UFormat "%Y-%m-%d_%H-%M-%S"
+                $timeStamp = Get-Date -UFormat "%Y-%m-%d_%H-%M-%S"
     
                 Write-Verbose "Getting file extension..."
-                $extOnly = $fileObj.extension
+                $ext = $obj.extension
     
-                if ($extOnly.Length -eq 0) {
-                    $nameOnly = $fileObj.Name
+                if ($ext.Length -eq 0) {
+                    $name = $obj.Name
     
                     Write-Verbose "File doesn't have extension."
                     if ($KeepOriginal) {
                         Write-Verbose "KeepOriginal switch was selected. Copying file..."
-                        $filePath = Split-Path $fileObj -Parent
-                        Copy-Item $fileObj -Destination "$filePath`\$nameOnly-$dateStamp$extOnly"
-                        Write-Host -ForegroundColor Green "New file name: $nameOnly-$dateStamp"
+                        $filePath = Split-Path $obj -Parent
+                        Copy-Item $obj -Destination "$filePath`\$name-$timeStamp$ext"
+                        Write-Host -ForegroundColor Green "New file name: $name-$timeStamp"
                     }
                     else {
                         Write-Verbose "Renaming original file..."
-                        Rename-Item -Path $fileObj -NewName "$nameOnly-$dateStamp"
-                        Write-Host -ForegroundColor Green "Renamed file name: $nameOnly-$dateStamp"
+                        Rename-Item -Path $obj -NewName "$name-$timeStamp"
+                        Write-Host -ForegroundColor Green "Renamed file name: $name-$timeStamp"
                     }
     
                 }
                 else {
                     Write-Verbose "File does have extension."
-                    $nameOnly = $fileObj.Name.Replace( $fileObj.Extension, '')
+                    $name = $obj.Name.Replace( $obj.Extension, '')
                     
                     if ($KeepOriginal) {
                         Write-Verbose "KeepOriginal switch was selected. Copying file ..."
-                        $filePath = Split-Path $fileObj -Parent
-                        Copy-Item $fileObj -Destination "$filePath`\$nameOnly-$dateStamp$extOnly"
-                        Write-Host -ForegroundColor Green "New file name: $nameOnly-$dateStamp$extOnly"
+                        $filePath = Split-Path $obj -Parent
+                        Copy-Item $obj -Destination "$filePath`\$name-$timeStamp$ext"
+                        Write-Host -ForegroundColor Green "New file name: $name-$timeStamp$ext"
                     }
                     else {
                         Write-Verbose "Renaming original file..."
-                        Rename-Item -Path $fileObj -NewName "$nameOnly-$DateStamp$extOnly"
-                        Write-Host -ForegroundColor Green "Renamed file name: $nameOnly-$dateStamp$extOnly"
+                        Rename-Item -Path $obj -NewName "$name-$timeStamp$ext"
+                        Write-Host -ForegroundColor Green "Renamed file name: $name-$timeStamp$ext"
 
                     }
                 }
