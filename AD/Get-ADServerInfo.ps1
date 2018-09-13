@@ -23,6 +23,11 @@ This parameter specify where export CSV file will be saved.
 If its not specified, no export will be saved.
 It can be path including file name OR it can be only path without specifying file name. In that case file name will be generated in format ADServerInfo-Export-$timeStamp.csv
 
+.PARAMETER SingleVMWareServer
+ParameterSet: ExportInfo
+This is a Switch parameter. If it is used, script will only ask for single ESXi host or vCenter server connection. In case VM is not found on specified server, collecting information for that script will be skipped.
+
+
 .PARAMETER ImportPath
 ParameterSet: ImportInfo
 Specify path to file that should be imported.
@@ -61,8 +66,14 @@ function Get-ADServerInfo {
             ParameterSetName = 'ExportInfo',
             ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true,
-            HelpMessage = 'Enter Server names:')]
+            HelpMessage = 'Enter Domain name:')]
         [string]$Domain,
+
+        [Parameter(Mandatory = $false,
+            ParameterSetName = 'ExportInfo',
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true)]
+        [switch]$SingleVMWareServer,
 
         [Parameter(Mandatory = $false,      
             ParameterSetName = 'ExportInfo',
@@ -124,21 +135,133 @@ function Get-ADServerInfo {
                 Write-Verbose "Getting server model..."
                 $ServerModel = Get-WmiObject -Class Win32_ComputerSystem -ComputerName $Server.DNSHostName -Credential $credentials | Select-Object -ExpandProperty Model
                 
+                switch ($ServerModel) {
 
-                if ($ServerModel -like "*Virtual*") {
+                    'Virtual Machine' {
+                        Write-Verbose "Server is a Hyper-V Virtual Machine. Getting the name of physical host..."
+                        $HKLMdef = "2147483650"
+                        $KeyName = "SOFTWARE\Microsoft\Virtual Machine\Guest\Parameters"            
+                        $ValueName = "PhysicalHostName"
+
+                        $wmi = Get-Wmiobject -list "StdRegProv" -namespace root\default -Computername $Server.DNSHostName -Credential $credentials
+                        $VMHost = $wmi.GetStringValue($HKLMdef, $KeyName, $ValueName).svalue
+
+                        if (!$VMHost) {
+                            $VMHost = "Unknown Hyper-V Host"
+                        }
+                    }
+
+                    'VMWare Virtual Platform' {
+
+                        Write-Verbose "Server is a VMWare Virtual Machine."
+
+                        $VMWareFinished = $false
+                        $VMHost = $null
+                        if (!$VMWareAction) { $VMWareAction = "CheckTools"}
+                        
+                        do {
+
+                            switch ($VMWareAction) {
+
+                                'CheckTools' {
+
+                                    Write-Verbose -Message "Checking if VMWare CLI tools are installed ..."
+                                    If (Get-Command "Get-VIToolkitVersion" -ErrorAction SilentlyContinue) {
+
+                                        Write-Verbose -Message "VMware CLI tools are installed on local server."
+                                        $VMWareAction = "Connect"
+                                        $VMWareFinished = $false
+                                    }
+                                    else {
+                                        Write-Verbose -Message "VMWare CLI tools are not installed on local server or correct module is not loaded. Host info will not be collected."
+                                        $VMHost = "Unknown VMWare Host"
+                                        $VMWareFinished = $true
+                                    }
+
+                                }
+
+                                'Connect' {
+                                    
+                                    Write-Verbose -Message "Ready to connect to server."
+                                    $VMWareServer = Read-Host -Prompt "Enter FQDN of the ESXi host or the vCenter server"
+                                    $VMWareCredentials = Get-Credential -Message "Enter Credentials for accessing server $VMWareServer :"
+
+                                    Write-Verbose -Message "Connecting to server $VMWareServer..."
+                                    Connect-VIServer -Server $VMWareServer -Credential $VMWareCredentials
+                                    if ($?) {
+                                        Write-Verbose "VMWare host $VMWareServer connected."
+                                        $VMWareAction = "GetVM"
+                                        $VMWareFinished = $false
+                                    }
+                                    else {
+                                        Write-Verbose -Message "Connection unsuccessful."
+                                        $Answer1 = Read-Host -Prompt "Would you like to try to enter server or credentials? (Y/N)"
+
+                                        if ($Answer1 = "Y") {
+                                            $VMWareAction = "Connect"
+                                            $VMWareFinished = $false
+                                        }
+                                        else {
+                                            Write-Verbose -Message "Host info will not be collected."
+                                            $VMHost = "Unknown VMWare Host"
+                                            $VMWareFinished = $true
+                                        }
+                                    }
+
+                                }
+
+                                'GetVM' {
+                                    Write-Verbose -Message "Getting host info about VM $($Server.Name)...."
+                                    $VMHost = Get-VM -Name $($Server.Name) -ErrorAction SilentlyContinue | Select-Object VMHost
+
+                                    if ($?) {
+                                        $VMHost = $VMHost.VMHost.Name | Select-Object -First 1
+
+                                        $VMWareAction = "GetVM"
+                                        $VMWareFinished = $true
+                                    }
+                                    else {
+                                        Write-Verbose -Message "VM $($Server.Name) was not found on the host $VMWareServer."
+
+                                        if (!$SingleVMWareServer) {
+                                            $Answer2 = Read-Host -Prompt "Would you like to connect to different VMWare server? (Y/N)"
+                                            
+                                            if ($Answer2 -eq "Y") {
+                                                $VMWareAction = "Connect"
+                                                $VMWareFinished = $false
+                                            }
+                                            else {
+                                                Write-Verbose -Message "Host info will not be collected."
+                                                $VMHost = "Unknown VMWare Host"
+                                                $VMWareFinished = $true
+                                            }
+                                        }
+                                        else {
+                                            Write-Verbose -Message "Parameter -SingleVMWareServer was used. Host info will not be collected."
+                                            $VMHost = "Unknown VMWare Host"
+                                            $VMWareFinished = $true
+                                        }
+                                        
+                                    }
+
+                                }
+                            }
+
+                        } while (!$VMWareFinished)
                     
-                    Write-Verbose "Server is Virtual Machine. Getting the name of physical host..."
-                    $HKLMdef = "2147483650"
-                    $KeyName = "SOFTWARE\Microsoft\Virtual Machine\Guest\Parameters"            
-                    $ValueName = "PhysicalHostName"
+                    }
 
-                    $wmi = Get-Wmiobject -list "StdRegProv" -namespace root\default -Computername $Server.DNSHostName -Credential $credentials
-                    $VMHost = $wmi.GetStringValue($HKLMdef, $KeyName, $ValueName).svalue
+                
+                    'VirtualBox' {
+                        Write-Verbose "Server is running in VirtualBox. We still need to figure out how to find name of the host computer :-)"
+                        $VMHost = "Unknown VirtualBox Host"
+                    }
 
-                }
-                else {
-                    Write-Verbose "Server is not Virtual Machine. There is no physical host."
-                    $VMHost = $null
+                    Default {
+                        Write-Verbose "Server is not a Virtual Machine."
+                        $VMHost = $null
+                    }
+                    
                 }
 
 
@@ -193,7 +316,10 @@ function Get-ADServerInfo {
 
                 Write-Verbose "Provided path is file."
 
-                $fileName = $ExportPath
+                Write-Verbose "Adding TimeStamp to file name..."
+                $fileNameSplit = $ExportPath.Split(".")
+                $fileName = $fileNameSplit[0] + "-" + $timeStamp + "." + $fileNameSplit[1]
+                $fileName2 = $fileNameSplit[0] + "-OfflineServers-" + $timeStamp + ".txt"
 
             }
             else {
@@ -204,17 +330,29 @@ function Get-ADServerInfo {
                 if ($ExportPath -notmatch '.+?\\$') {
 
                     $fileName = $ExportPath + "\" + "ADServerInfo-Export-$timeStamp.csv"
+                    $fileName2 = $ExportPath + "\" + "ADServerInfo-OfflineServers-$timeStamp.txt"
 
                 }
                 else {
                     $fileName = $ExportPath + "ADServerInfo-Export-$timeStamp.csv"
+                    $fileName2 = $ExportPath + "ADServerInfo-OfflineServers-$timeStamp.txt"
+
                 }
                 
             }
 
-            Write-Verbose "Exporting results to CSV file..."
+            Write-Verbose "Exporting results to CSV files..."
             $onlineServers | Export-Csv -Path $fileName -Delimiter ";" -NoTypeInformation -Append #Append because file might already exist
+            
+            
+            if ($offlineServers.Count -gt 0) {
 
+                Write-Verbose "Number of Offline Servers is greater than 0. Exporting list of Offline Servers to separate text file..."
+                $offlineServers | Out-File -FilePath $fileName2
+
+            }
+            
+            
         }
 
     }
@@ -261,6 +399,7 @@ function Get-ADServerInfo {
             Write-Verbose "Show import server info."
             Write-Host -ForegroundColor Cyan "Data imported to object `$ServerInfo"
             $ServerInfo | Format-Table -AutoSize
+            Write-Host -ForegroundColor Cyan "Data imported to object `$ServerInfo"
 
         }
 
