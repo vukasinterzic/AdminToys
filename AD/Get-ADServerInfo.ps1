@@ -215,7 +215,7 @@ function Get-ADServerInfo {
                                     $VMHost = Get-VM -Name $($Server.Name) -ErrorAction SilentlyContinue | Select-Object VMHost
 
                                     if ($?) {
-                                        $VMHost = $VMHost.VMHost.Name | select -First 1
+                                        $VMHost = $VMHost.VMHost.Name | Select-Object -First 1
 
                                         $VMWareAction = "GetVM"
                                         $VMWareFinished = $true
