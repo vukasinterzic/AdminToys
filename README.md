@@ -31,7 +31,8 @@ Add date and time stamp to end of file name. You can use it to rename existing f
 Get-AccountFromSID, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-FirewallRules, Copy-MyItem
 
 ## Planned changes
-Change function names
-Adding more funcitons
-Add guide on how to install module from library/github
+#TODO Change function names
+#TODO Adding more funcitons
+#TODO Add guide on how to install module from library/github
+
 
