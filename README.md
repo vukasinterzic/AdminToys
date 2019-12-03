@@ -26,3 +26,12 @@ Collect basic information about specified servers or all servers found in Active
 
 #### StampFile
 Add date and time stamp to end of file name. You can use it to rename existing file or copy file with date and time added to the end of original name.
+
+## Work in progress functions
+Get-AccountFromSID, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-FirewallRules, Copy-MyItem
+
+## Planned changes
+Change function names
+Adding more funcitons
+Add guide on how to install module from library/github
+
