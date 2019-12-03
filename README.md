@@ -32,7 +32,9 @@ Get-AccountFromSID, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-Fi
 
 ## Planned changes
 #TODO Change function names
+
 #TODO Adding more funcitons
+
 #TODO Add guide on how to install module from library/github
 
 
