@@ -30,8 +30,18 @@ Collect basic information about specified servers or all servers found in Active
 #### StampFile
 Add date and time stamp to the end of the file name. You can use it to rename the existing file or to make a copy of that file with date and time added to the end of the original name.
 
+#### Convert-TextToASCIIArt
+Converts your Text to
+  _______        _   
+ |__   __|      | |  
+    | | _____  __ |_ 
+    | |/ _ \ \/ / __|
+    | |  __/>  <| |_ 
+    |_|\___/_/\_\\__|
+
+
 ## Work in progress functions
-Get-AccountFromSID, Get-SIDFromAccount, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-FirewallRules, Copy-MyItem, Install-ModuleFromGitHub, Update-ModuleFromGitHub, Convert-TextToASCIIArt Get-ADGroupMembershipChanges, Get-ComputerBitlockerInfo
+Get-AccountFromSID, Get-SIDFromAccount, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-FirewallRules, Copy-MyItem, Install-ModuleFromGitHub, Update-ModuleFromGitHub, Get-ADGroupMembershipChanges, Get-ComputerBitlockerInfo
 
 ## Planned changes
 #TODO Add more functions
