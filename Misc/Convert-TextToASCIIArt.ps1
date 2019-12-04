@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-Convert your text to ASCII Art by using web API and save it to $ASCIIArt variable + copy to clipboard
+Convert your text to ASCII Art by using web API.
 
 .DESCRIPTION
-Convert text. Output is variable and clipboard
+Convert text. Output is also copied to sclipboard.
 
 .PARAMETER Text
 Add text. Parameter is mandatory.
@@ -20,7 +20,6 @@ Convert-TextToASCIIArt -Text "Hello World"
 https://github.com/vukasinterzic/AdminToolBox
 
 #>
-$global:ASCIIArtText = ""
 
 function Convert-TextToASCIIArt {
 
@@ -41,11 +40,15 @@ function Convert-TextToASCIIArt {
         
         $Text = $Text.Replace(" ","+")
         $URL = "http://artii.herokuapp.com/make?text="+$Text
-        $global:ASCIIArtText = (Invoke-WebREquest -URI $URL).Content
+        $ASCIIArtText = (Invoke-WebREquest -URI $URL).Content
 
-        $global:ASCIIArtText | clip
+        $ASCIIArtText | clip
 
-        Write-Verbose "Text converted and saved in variable `$ASCIIArtText"
+        Write-Verbose "Text converted and copied to clipboard"
+
+        if ($ASCIIArtText) {
+            $ASCIIArtText
+        }
 
     } #end of Process
 
