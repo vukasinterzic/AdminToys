@@ -28,7 +28,7 @@ Get the exact uptime and last bootup time of local or remote computer or compute
 Collect basic information about specified servers or all servers found in Active Directory. Collected information is useful for having basic overview of where they are, what systems are they running and what are they used for.
 
 #### StampFile
-Add date and time stamp to end of file name. You can use it to rename existing file or copy file with date and time added to the end of original name.
+Add date and time stamp to the end of the file name. You can use it to rename the existing file or to make a copy of that file with date and time added to the end of the original name.
 
 ## Work in progress functions
 Get-AccountFromSID, Get-SIDFromAccount, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-FirewallRules, Copy-MyItem, Install-ModuleFromGitHub, Update-ModuleFromGitHub, Convert-TextToASCIIArt Get-ADGroupMembershipChanges, Get-ComputerBitlockerInfo

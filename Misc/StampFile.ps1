@@ -3,7 +3,7 @@
 Add date and time stamp to file name, or create new file. 
 
 .DESCRIPTION
-Rename any type of file or files and add current date and time stamp to end of file name. You can also decide to keep existing file and create new file with date and time added to original name.
+Rename any type of file or files and add current date and time stamp to the end of file name. You can also decide to keep existing file and create new file with the date and time added to the original name.
 
 .PARAMETER fileNames
 Specify name of file or files. This can come from pipeline. Parameter is mandatory.
