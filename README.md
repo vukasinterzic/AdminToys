@@ -32,13 +32,14 @@ Add date and time stamp to the end of the file name. You can use it to rename th
 
 #### Convert-TextToASCIIArt
 Converts your Text to
+```
   _______        _   
  |__   __|      | |  
     | | _____  __ |_ 
     | |/ _ \ \/ / __|
     | |  __/>  <| |_ 
     |_|\___/_/\_\\__|
-
+```
 
 ## Work in progress functions
 Get-AccountFromSID, Get-SIDFromAccount, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-FirewallRules, Copy-MyItem, Install-ModuleFromGitHub, Update-ModuleFromGitHub, Get-ADGroupMembershipChanges, Get-ComputerBitlockerInfo
