@@ -21,6 +21,9 @@ Create new A DNS record in AD integrated DNS zone using dnscmd tool.
 #### Get-LocalAdmins
 Get list of users and groups with local admin rights on local or remote computer. Export to CSV if needed.
 
+#### Get-Uptime
+Get the exact uptime and last bootup time of local or remote computer or computers.
+
 #### Get-ADServersInfo
 Collect basic information about specified servers or all servers found in Active Directory. Collected information is useful for having basic overview of where they are, what systems are they running and what are they used for.
 

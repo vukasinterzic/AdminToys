@@ -5,7 +5,7 @@ This function help you find and export disk space information from local or remo
 .DESCRIPTION
 This function help you find and export disk space information from local or remote computer. Size is automatically converted to MB,GB or TB.
 
-.PARAMETER Computer
+.PARAMETER ComputerName
 Specifies the name computer or computers.
 
 .PARAMETER SizeIn
@@ -27,7 +27,7 @@ Size, FreeSpace, UsedSpace, Totals
 C:\PS> Get-DiskSpace
 
 .EXAMPLE
-C:\PS> Get-DiskSpace -Computers COMPUTERNAME1 -SizeIn TB -UseCredentials -ExportPath C:\export.csv
+C:\PS> Get-DiskSpace -ComputerName COMPUTERNAME1 -SizeIn TB -UseCredentials -ExportPath C:\export.csv
 
 .EXAMPLE
 C:\PS> $ComputerList | Get-DiskSpace
@@ -45,7 +45,7 @@ function Get-DiskSpace {
     (
         [Parameter(ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true)]
-        [array]$Computersa,
+        [array]$ComputerName,
         
         [Parameter(ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true)]
@@ -75,8 +75,8 @@ function Get-DiskSpace {
 
         }
 
-        if (!$Computers) {
-            $Computers = @($env:computername)
+        if (!$ComputerName) {
+            $ComputerName = @($env:computername)
         }
 
         if ($sizeIn -eq "Bytes") { 
@@ -97,7 +97,7 @@ function Get-DiskSpace {
     process {
 
         # Computers loop start
-        foreach ($Computer in $Computers) {
+        foreach ($Computer in $ComputerName) {
 
             Try {
 
