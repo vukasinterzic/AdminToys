@@ -31,7 +31,7 @@ Collect basic information about specified servers or all servers found in Active
 Add date and time stamp to end of file name. You can use it to rename existing file or copy file with date and time added to the end of original name.
 
 ## Work in progress functions
-Get-AccountFromSID, Get-SIDFromAccount, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-FirewallRules, Copy-MyItem, Install-ModuleFromGitHub, Update-ModuleFromGitHub, Convert-TextToASCIIArt
+Get-AccountFromSID, Get-SIDFromAccount, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-FirewallRules, Copy-MyItem, Install-ModuleFromGitHub, Update-ModuleFromGitHub, Convert-TextToASCIIArt Get-ADGroupMembershipChanges, Get-ComputerBitlockerInfo
 
 ## Planned changes
 #TODO Add more functions
