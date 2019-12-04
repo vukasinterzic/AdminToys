@@ -30,7 +30,7 @@ C:\PS> Get-DiskSpace
 C:\PS> Get-DiskSpace -Computers COMPUTERNAME1 -SizeIn TB -UseCredentials -ExportPath C:\export.csv
 
 .EXAMPLE
-C:\PS> computerlist.txt | Get-DiskSpace
+C:\PS> $ComputerList | Get-DiskSpace
 
 .LINK
 https://github.com/vukasinterzic/AdminToolBox
@@ -43,10 +43,9 @@ function Get-DiskSpace {
 
     param 
     (
-        [Parameter(Mandatory = $true,
-            ValueFromPipeline = $true,
+        [Parameter(ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true)]
-        [array]$Computers,
+        [array]$Computersa,
         
         [Parameter(ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true)]
@@ -74,6 +73,10 @@ function Get-DiskSpace {
             4 = "Network disk"
             5 = "Compact disk"
 
+        }
+
+        if (!$Computers) {
+            $Computers = @($env:computername)
         }
 
         if ($sizeIn -eq "Bytes") { 
