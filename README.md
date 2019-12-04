@@ -28,15 +28,13 @@ Collect basic information about specified servers or all servers found in Active
 Add date and time stamp to end of file name. You can use it to rename existing file or copy file with date and time added to the end of original name.
 
 ## Work in progress functions
-Get-AccountFromSID, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-FirewallRules, Copy-MyItem, Install-ModuleFromGitHub, Update-ModuleFromGitHub
+Get-AccountFromSID, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-FirewallRules, Copy-MyItem, Install-ModuleFromGitHub, Update-ModuleFromGitHub, Convert-TextToASCIIArt
 
 ## Planned changes
-#TODO Change function names
-
-#TODO Adding more funcitons
+#TODO Add more functions
 
 #TODO Add guide on how to install module from library/github
 
-#FIXME Get-DiskSpace doesn't work
+#FIXME Local computer should be default
 
-#TODO Add bunch of functions, make module public and share it
+#FIXME functions shouldn't ask for credentials if not specified
