@@ -47,6 +47,8 @@ Get-AccountFromSID, Get-SIDFromAccount, Get-ShutDown, Get-LogOnLogOut, Get-Insta
 ## Planned changes
 #TODO Add more functions
 
+#TODO Add functions from FullServerInfo script
+
 #TODO Add guide on how to install module from library/github
 
 #FIXME Local computer should be default
