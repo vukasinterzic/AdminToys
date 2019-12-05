@@ -88,7 +88,7 @@ function Get-DiskSpace {
         if (($UseCredentials) -and (!$Credential)) {
             Write-Verbose "Parameter UseCredentials is used. Getting user credentials..."
             Write-Host -ForegroundColor Cyan "Enter your credentials:"
-            $credentials = Get-Credential
+            $Credential = Get-Credential
         }
         
     }
@@ -155,7 +155,7 @@ function Get-DiskSpace {
             }
 
             Write-Verbose -Message "Disk information:"
-            
+
             $ComputerDisks
 
         }

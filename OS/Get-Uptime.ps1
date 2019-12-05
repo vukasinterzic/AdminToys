@@ -60,7 +60,7 @@ function Get-Uptime {
         if (($UseCredentials) -and (!$Credential)) {
             Write-Verbose "Parameter UseCredentials is used. Getting user credentials..."
             Write-Host -ForegroundColor Cyan "Enter your credentials:"
-            $Credentials = Get-Credential
+            $Credential = Get-Credential
         }
         
     }
@@ -127,7 +127,7 @@ function Get-Uptime {
 
             #show results:    
             Write-Verbose -Message "Uptime information collected on $(Get-Date -DisplayHint Date):"
-            
+
             $ComputersUptime
 
         }
