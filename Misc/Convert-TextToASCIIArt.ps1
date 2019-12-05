@@ -58,6 +58,4 @@ function Convert-TextToASCIIArt {
 
 }
 
-#TODO Add description
-#TODO Add font selection
-#TODO Add color and print option
+#TODO Add font selection option
