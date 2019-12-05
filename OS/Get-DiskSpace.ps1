@@ -33,7 +33,7 @@ C:\PS> Get-DiskSpace -ComputerName COMPUTERNAME1 -SizeIn TB -UseCredentials -Exp
 C:\PS> $ComputerList | Get-DiskSpace | Format-Table -GroupBy ComputerName
 
 .EXAMPLE
-C:\PS> $ComputerList | % { Get-DiskSpace -ComputerName $_ } | Format-Table
+C:\PS> $ComputerList | % { Get-DiskSpace -ComputerName $_ }
 
 .LINK
 https://github.com/vukasinterzic/AdminToolBox
@@ -106,7 +106,7 @@ function Get-DiskSpace {
 
                 if ($UseCredentials) { 
                     #creating cmdlet with parameter -Credentials. Variables have escape character (`) so their content is not added to $arg string.
-                    $arg = "Get-WmiObject -Class Win32_LogicalDisk -ComputerName `$Computer -Credential `$credentials -ErrorAction Stop"
+                    $arg = "Get-WmiObject -Class Win32_LogicalDisk -ComputerName `$Computer -Credential `$Credential -ErrorAction Stop"
 
                 }
                 else {
