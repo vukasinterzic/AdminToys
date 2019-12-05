@@ -88,7 +88,7 @@ function Get-DiskSpace {
         if (($UseCredentials) -and (!$Credential)) {
             Write-Verbose "Parameter UseCredentials is used. Getting user credentials..."
             Write-Host -ForegroundColor Cyan "Enter your credentials:"
-            $credentials = Get-Credential
+            $Credential = Get-Credential
         }
         
     }
@@ -106,7 +106,7 @@ function Get-DiskSpace {
 
                 if ($UseCredentials) { 
                     #creating cmdlet with parameter -Credentials. Variables have escape character (`) so their content is not added to $arg string.
-                    $arg = "Get-WmiObject -Class Win32_LogicalDisk -ComputerName `$Computer -Credential `$credentials -ErrorAction Stop"
+                    $arg = "Get-WmiObject -Class Win32_LogicalDisk -ComputerName `$Computer -Credential `$Credential -ErrorAction Stop"
 
                 }
                 else {
