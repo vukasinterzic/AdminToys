@@ -3,7 +3,7 @@
 This function collects the list of installed Windows features from remote or local computer with Server OS.
 
 .DESCRIPTION
-This function detects the type of OS, and if it is Windows Server OS, it will collect the list of installed Windows Features and return it.
+This function detects the OS type and if it is Windows Server OS, it will collect the list of installed Windows Features and return it.
 
 .PARAMETER ComputerName
 Specifies the name computer or computers.

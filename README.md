@@ -27,6 +27,9 @@ Get the exact uptime and last bootup time of local or remote computer or compute
 #### Get-ADServersInfo
 Collect basic information about specified servers or all servers found in Active Directory. Collected information is useful for having basic overview of where they are, what systems are they running and what are they used for.
 
+#### Get-InstalledFeatures
+This function collects the list of installed Windows features from remote or local computer with Server OS.
+
 #### Get-PublicIP
 This function finds the Public IP address of local or remote computer and returns it. It can run with multiple computers and use credentials if needed.
 
