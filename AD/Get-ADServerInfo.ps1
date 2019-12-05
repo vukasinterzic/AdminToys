@@ -79,7 +79,7 @@ function Get-ADServerInfo {
             ParameterSetName = 'ExportInfo',
             ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true)]
-        [securestring]$UseCredentials,
+        [switch]$UseCredentials,
 
         [Parameter(Mandatory = $false,
             ParameterSetName = 'ExportInfo',
@@ -116,7 +116,7 @@ function Get-ADServerInfo {
         if (($UseCredentials) -and (!$Credential)) {
             Write-Verbose -Message "Parameter UseCredentials is used. Getting user credentials..."
             Write-Host -ForegroundColor Cyan "Enter your credentials:"
-            $Credential = Get-Credential
+            [securestring]$Credential = Get-Credential
         }
         
         $global:onlineServers = @()
