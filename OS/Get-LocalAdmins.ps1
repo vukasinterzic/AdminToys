@@ -12,6 +12,9 @@ Find users and groups with local admin rights on local or remote computer.
 
 Specifies the name of computer or computers.
 
+.PARAMETER UseCredentials
+Switch parameter. If used, you will be asked to provide credentials that are used to access computers.
+
 .PARAMETER ExportPath
 
 Specify export file path, including file name. Export file is csv.

@@ -17,6 +17,9 @@ List of servers to scan. If parameter is not specified, script will collect all 
 ParameterSet: ExportInfo
 Specify AD domain. If parameter is not specified, domain of user will be used. This will not work if you are on non-domain joined PC.
 
+.PARAMETER UseCredentials
+Switch parameter. If used, you will be asked to provide credentials that are used to access computers.
+
 .PARAMETER ExportPath
 ParameterSet: ExportInfo
 This parameter specify where export CSV file will be saved.
@@ -42,6 +45,9 @@ This is a Switch parameter. If it is used, script will import newest CSV file fr
 
 .EXAMPLE
 Get-ADServerInfo -Servers $ServerList -Domain $domain -ExportPath $path
+
+.EXAMPLE
+Get-ADServerInfo -ExportPath C:\export.csv
 
 .EXAMPLE
 Get-ADServerInfo -ImportPath $path -ImportLastFile
@@ -73,6 +79,12 @@ function Get-ADServerInfo {
             ParameterSetName = 'ExportInfo',
             ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true)]
+        [securestring]$UseCredentials,
+
+        [Parameter(Mandatory = $false,
+            ParameterSetName = 'ExportInfo',
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true)]
         [switch]$SingleVMWareServer,
 
         [Parameter(Mandatory = $false,      
@@ -94,25 +106,31 @@ function Get-ADServerInfo {
         [switch]$ImportLastFile
     )
 
+    #FIXME Make advanced function instead of simple function
     
-    Write-Verbose "Start of function Get-ADServerInfo $(Get-Date -Format g)."
+    Write-Verbose -Message "Start of function Get-ADServerInfo $(Get-Date -Format g)."
 
     if (!$ImportPath) {
-        Write-Verbose "Parameter Set ExportPath is used."
-        Write-Verbose "Getting user credentials..."
-        $credentials = Get-Credential
+        Write-Verbose -Message "Parameter Set ExportPath is used."
+        
+        if (($UseCredentials) -and (!$Credential)) {
+            Write-Verbose -Message "Parameter UseCredentials is used. Getting user credentials..."
+            Write-Host -ForegroundColor Cyan "Enter your credentials:"
+            $Credential = Get-Credential
+        }
+        
         $global:onlineServers = @()
         $global:offlineServers = @()
         
         if (!$Domain) {
-            Write-Verbose "Domain name not specified. Using domain of localhost computer."
+            Write-Verbose -Message "Domain name not specified. Using domain of localhost computer."
             $Domain = $ENV:USERDOMAIN
         }
 
         #list of servers, excluding Cluster CNO
         if (!$Servers) {
             Write-Host -ForegroundColor Cyan "Server list not specified. Getting all servers in AD domain..."
-            $Servers = Get-ADComputer -Server $Domain -Credential $credentials -filter {(OperatingSystem -like "*Server*") -and ((Description -notlike "*") -or (Description -notlike "*Failover cluster virtual network name account*"))} -Properties Name | Select-Object -ExpandProperty Name
+            $Servers = Get-ADComputer -Server $Domain -Credential $Credential -filter {(OperatingSystem -like "*Server*") -and ((Description -notlike "*") -or (Description -notlike "*Failover cluster virtual network name account*"))} -Properties Name | Select-Object -ExpandProperty Name
         }
 
         $i = 0
@@ -124,26 +142,26 @@ function Get-ADServerInfo {
 
             if (Test-Connection $Server -Quiet -Count 1) {
 
-                $Server = Get-ADComputer -Server $Domain -Identity $Server -Credential $credentials -Properties Name, DNSHostName, IPv4Address, OperatingSystem, Description | Select-Object Name, DNSHostName, IPv4Address, OperatingSystem, Description
+                $Server = Get-ADComputer -Server $Domain -Identity $Server -Credential $Credential -Properties Name, DNSHostName, IPv4Address, OperatingSystem, Description | Select-Object Name, DNSHostName, IPv4Address, OperatingSystem, Description
 
-                Write-Verbose "Getting NetBIOS name of server..."
-                $netBIOSName = (Get-ADDOmain -Server $Domain -Credential $credentials).NetBIOSName
+                Write-Verbose -Message "Getting NetBIOS name of server..."
+                $netBIOSName = (Get-ADDOmain -Server $Domain -Credential $Credential).NetBIOSName
 
-                Write-Verbose "Getting server site..."
-                $ServerSite = Get-WmiObject -Class Win32_ntdomain -ComputerName $Server.DNSHostName -Credential $credentials | Where-Object DomainName -Like $netBIOSName | Select-Object -ExpandProperty ClientSiteName
+                Write-Verbose -Message "Getting server site..."
+                $ServerSite = Get-WmiObject -Class Win32_ntdomain -ComputerName $Server.DNSHostName -Credential $Credential | Where-Object DomainName -Like $netBIOSName | Select-Object -ExpandProperty ClientSiteName
                 
-                Write-Verbose "Getting server model..."
-                $ServerModel = Get-WmiObject -Class Win32_ComputerSystem -ComputerName $Server.DNSHostName -Credential $credentials | Select-Object -ExpandProperty Model
+                Write-Verbose -Message "Getting server model..."
+                $ServerModel = Get-WmiObject -Class Win32_ComputerSystem -ComputerName $Server.DNSHostName -Credential $Credential | Select-Object -ExpandProperty Model
                 
                 switch ($ServerModel) {
 
                     'Virtual Machine' {
-                        Write-Verbose "Server is a Hyper-V Virtual Machine. Getting the name of physical host..."
+                        Write-Verbose -Message "Server is a Hyper-V Virtual Machine. Getting the name of physical host..."
                         $HKLMdef = "2147483650"
                         $KeyName = "SOFTWARE\Microsoft\Virtual Machine\Guest\Parameters"            
                         $ValueName = "PhysicalHostName"
 
-                        $wmi = Get-Wmiobject -list "StdRegProv" -namespace root\default -Computername $Server.DNSHostName -Credential $credentials
+                        $wmi = Get-Wmiobject -list "StdRegProv" -namespace root\default -Computername $Server.DNSHostName -Credential $Credential
                         $VMHost = $wmi.GetStringValue($HKLMdef, $KeyName, $ValueName).svalue
 
                         if (!$VMHost) {
@@ -153,7 +171,7 @@ function Get-ADServerInfo {
 
                     'VMWare Virtual Platform' {
 
-                        Write-Verbose "Server is a VMWare Virtual Machine."
+                        Write-Verbose -Message "Server is a VMWare Virtual Machine."
 
                         $VMWareFinished = $false
                         $VMHost = $null
@@ -189,7 +207,7 @@ function Get-ADServerInfo {
                                     Write-Verbose -Message "Connecting to server $VMWareServer..."
                                     Connect-VIServer -Server $VMWareServer -Credential $VMWareCredentials
                                     if ($?) {
-                                        Write-Verbose "VMWare host $VMWareServer connected."
+                                        Write-Verbose -Message "VMWare host $VMWareServer connected."
                                         $VMWareAction = "GetVM"
                                         $VMWareFinished = $false
                                     }
@@ -253,12 +271,12 @@ function Get-ADServerInfo {
 
                 
                     'VirtualBox' {
-                        Write-Verbose "Server is running in VirtualBox. We still need to figure out how to find name of the host computer :-)"
+                        Write-Verbose -Message "Server is running in VirtualBox. Still need to figure out how to find the name of the host computer :-)"
                         $VMHost = "Unknown VirtualBox Host"
                     }
 
                     Default {
-                        Write-Verbose "Server is not a Virtual Machine."
+                        Write-Verbose -Message "Server is not a Virtual Machine."
                         $VMHost = $null
                     }
                     
@@ -278,28 +296,28 @@ function Get-ADServerInfo {
                 $obj | Add-Member -MemberType NoteProperty -Name Site -Value $ServerSite
                 $obj | Add-Member -MemberType NoteProperty -Name Description -Value $Server.Description
 
-                Write-Verbose "Server $($Server.Name) is online and collected information was added to list of online servers."
+                Write-Verbose -Message "Server $($Server.Name) is online and collected information was added to list of online servers."
                 $global:onlineServers += $obj
 
             }
             else {
-                Write-Verbose "Server $Server is offline or it does no exist. Server name was added to the list of unavailable servers."
+                Write-Verbose -Message "Server $Server is offline or it does no exist. Server name was added to the list of unavailable servers."
                 $global:offlineServers += $Server
             
             }
 
-            Write-Verbose "Processing of server $i/$($Servers.Count) completed at $(Get-Date -Format g)."
+            Write-Verbose -Message "Processing of server $i/$($Servers.Count) completed at $(Get-Date -Format g)."
         }
 
         #Display Results
 
-        Write-Verbose "Collected information about accessible servers:"
+        Write-Verbose -Message "Collected information about accessible servers:"
         Write-Host -ForegroundColor Cyan "Online servers information:"
         $onlineServers | Format-Table -AutoSize
 
 
         if ($offlineServers.Count -gt 0) {
-            Write-Verbose "Number of inaccessible servers is >0."
+            Write-Verbose -Message "Number of inaccessible servers is >0."
             Write-Host -ForegroundColor Magenta "Offline servers list:"    
             $offlineServers
 
@@ -309,14 +327,14 @@ function Get-ADServerInfo {
         if ($ExportPath) {
             $timeStamp = Get-Date -f yyyy-MM-dd_HH-mm
 
-            Write-Verbose "ExportPath is selected. Results will be exported to CSV file."
-            Write-Verbose "Testing if provided path is file or directory..."
+            Write-Verbose -Message "ExportPath is selected. Results will be exported to CSV file."
+            Write-Verbose -Message "Testing if provided path is file or directory..."
 
             if ((Get-Item $ExportPath -ErrorAction SilentlyContinue) -isnot [System.IO.DirectoryInfo]) {
 
-                Write-Verbose "Provided path is file."
+                Write-Verbose -Message "Provided path is file."
 
-                Write-Verbose "Adding TimeStamp to file name..."
+                Write-Verbose -Message "Adding TimeStamp to file name..."
                 $fileNameSplit = $ExportPath.Split(".")
                 $fileName = $fileNameSplit[0] + "-" + $timeStamp + "." + $fileNameSplit[1]
                 $fileName2 = $fileNameSplit[0] + "-OfflineServers-" + $timeStamp + ".txt"
@@ -324,7 +342,7 @@ function Get-ADServerInfo {
             }
             else {
 
-                Write-Verbose "Provided path is directory. New file will be created."
+                Write-Verbose -Message "Provided path is directory. New file will be created."
                
                 #Test if provided path contains \ in the end.
                 if ($ExportPath -notmatch '.+?\\$') {
@@ -341,13 +359,13 @@ function Get-ADServerInfo {
                 
             }
 
-            Write-Verbose "Exporting results to CSV files..."
+            Write-Verbose -Message "Exporting results to CSV files..."
             $onlineServers | Export-Csv -Path $fileName -Delimiter ";" -NoTypeInformation -Append #Append because file might already exist
             
             
             if ($offlineServers.Count -gt 0) {
 
-                Write-Verbose "Number of Offline Servers is greater than 0. Exporting list of Offline Servers to separate text file..."
+                Write-Verbose -Message "Number of Offline Servers is greater than 0. Exporting list of Offline Servers to separate text file..."
                 $offlineServers | Out-File -FilePath $fileName2
 
             }
@@ -360,20 +378,20 @@ function Get-ADServerInfo {
         # End of information collection. Start of Information import.
         
         If ($ImportLastFile) {
-            Write-Verbose "Parameter ImportLastFile was selected. Finding the last file in specified path."
+            Write-Verbose -Message "Parameter ImportLastFile was selected. Finding the last file in specified path."
             $fileName = (Get-ChildItem -Path $ImportPath | Where-Object Name -like "*.csv" | Sort-Object LastAccessTime -Descending | Select-Object -First 1).FullName
         
         }
         else {
-            Write-Verbose "Full path to file specified. Testing if file is available..."
+            Write-Verbose -Message "Full path to file specified. Testing if file is available..."
 
             if (Test-Path $ImportPath) {
-                Write-Verbose "Provided file is accessible. Checking if file is CSV."
+                Write-Verbose -Message "Provided file is accessible. Checking if file is CSV."
 
                 $extn = [IO.Path]::GetExtension($ImportPath)
 
                 if ($extn -eq ".csv") {
-                    Write-Verbose "File is accessible and CSV. Importing..."
+                    Write-Verbose -Message "File is accessible and CSV. Importing..."
                     $fileName = $ImportPath
 
                 }
@@ -392,11 +410,11 @@ function Get-ADServerInfo {
         if ($fileName) {
 
             # Import CSV file
-            Write-Verbose "Importing CSV file to object `$ServerInfo..."
+            Write-Verbose -Message "Importing CSV file to object `$ServerInfo..."
             $global:ServerInfo = Import-Csv -Path $fileName -Delimiter ";"
 
             # Display imported info
-            Write-Verbose "Show import server info."
+            Write-Verbose -Message "Show import server info."
             Write-Host -ForegroundColor Cyan "Data imported to object `$ServerInfo"
             $ServerInfo | Format-Table -AutoSize
             Write-Host -ForegroundColor Cyan "Data imported to object `$ServerInfo"
@@ -405,5 +423,5 @@ function Get-ADServerInfo {
 
     } # End of Import
 
-    Write-Verbose "End of Function Get-ADServerInfo $(Get-Date -Format g)."
+    Write-Verbose -Message "End of Function Get-ADServerInfo $(Get-Date -Format g)."
 } # End of Get-ADServerInfo
