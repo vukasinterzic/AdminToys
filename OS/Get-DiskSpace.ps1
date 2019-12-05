@@ -33,7 +33,7 @@ C:\PS> Get-DiskSpace -ComputerName COMPUTERNAME1 -SizeIn TB -UseCredentials -Exp
 C:\PS> $ComputerList | Get-DiskSpace | Format-Table -GroupBy ComputerName
 
 .EXAMPLE
-C:\PS> $ComputerList | % { Get-DiskSpace -ComputerName $_ } | Format-Table
+C:\PS> $ComputerList | % { Get-DiskSpace -ComputerName $_ }
 
 .LINK
 https://github.com/vukasinterzic/AdminToolBox
