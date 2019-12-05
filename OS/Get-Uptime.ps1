@@ -42,7 +42,7 @@ function Get-Uptime {
     (
         [Parameter(ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true)]
-        [array]$ComputerName = $env:computername,
+        [array]$ComputerName = $env:COMPUTERNAME,
 
         [Parameter(ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true)]
@@ -57,10 +57,10 @@ function Get-Uptime {
     begin {
         Write-Verbose "Function Get-Uptime start. Finding uptime space."
         
-        if ($UseCredentials) {
+        if (($UseCredentials) -and (!$Credential)) {
             Write-Verbose "Parameter UseCredentials is used. Getting user credentials..."
             Write-Host -ForegroundColor Cyan "Enter your credentials:"
-            $credentials = Get-Credential
+            $Credentials = Get-Credential
         }
         
     }
@@ -78,8 +78,12 @@ function Get-Uptime {
 
                 if ($UseCredentials) { 
                     #creating cmdlet with parameter -Credentials. Variables have escape character (`) so their content is not added to $arg string.
-                    $arg = "Get-WmiObject -Class Win32_OperatingSystem -Property LastBootUpTime -ComputerName `$Computer -Credential `$credentials -ErrorAction Stop"
+                    $arg = "Get-WmiObject -Class Win32_OperatingSystem -Property LastBootUpTime -ComputerName `$Computer -Credential `$Credential -ErrorAction Stop"
 
+                }
+                elseif ($Computer -eq "$env:COMPUTERNAME") {
+                    #cmdlet without -Credentials and without -ComputerName parameters
+                    $arg = "Get-WmiObject -Class Win32_OperatingSystem -Property LastBootUpTime -ErrorAction Stop"
                 }
                 else {
                     #cmdlet without -Credentials parameter. Useful for localhost or computers where current user has access.
@@ -122,17 +126,15 @@ function Get-Uptime {
             }
 
             #show results:    
-            Write-Host -ForegroundColor Yellow "Uptime information collected on " -NoNewline
-            Write-Host -ForegroundColor Green "$(Get-Date -DisplayHint Date)" -NoNewline
-            Write-Host -ForegroundColor Yellow " :"
-            $ComputersUptime | Format-Table
+            Write-Verbose -Message "Uptime information collected on $(Get-Date -DisplayHint Date):"
+            
+            $ComputersUptime
 
         }
 
     } #end of Process
 
     end {
-        if ($credentials) {Clear-Variable credentials}
 
         Write-Verbose "End of Get-Uptime function."
     }

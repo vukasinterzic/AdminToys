@@ -30,7 +30,10 @@ C:\PS> Get-DiskSpace
 C:\PS> Get-DiskSpace -ComputerName COMPUTERNAME1 -SizeIn TB -UseCredentials -ExportPath C:\export.csv
 
 .EXAMPLE
-C:\PS> $ComputerList | Get-DiskSpace
+C:\PS> $ComputerList | Get-DiskSpace | Format-Table -GroupBy ComputerName
+
+.EXAMPLE
+C:\PS> $ComputerList | % { Get-DiskSpace -ComputerName $_ } | Format-Table
 
 .LINK
 https://github.com/vukasinterzic/AdminToolBox
@@ -45,7 +48,7 @@ function Get-DiskSpace {
     (
         [Parameter(ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true)]
-        [array]$ComputerName,
+        [array]$ComputerName = $env:computername,
         
         [Parameter(ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true)]
@@ -75,10 +78,6 @@ function Get-DiskSpace {
 
         }
 
-        if (!$ComputerName) {
-            $ComputerName = @($env:computername)
-        }
-
         if ($sizeIn -eq "Bytes") { 
             $sizeDivide = "1"
         }
@@ -86,7 +85,7 @@ function Get-DiskSpace {
             $sizeDivide = "1$sizeIn"
         }
         
-        if ($UseCredentials) {
+        if (($UseCredentials) -and (!$Credential)) {
             Write-Verbose "Parameter UseCredentials is used. Getting user credentials..."
             Write-Host -ForegroundColor Cyan "Enter your credentials:"
             $credentials = Get-Credential
@@ -95,6 +94,8 @@ function Get-DiskSpace {
     }
 
     process {
+
+        $ComputerDisks = @()
 
         # Computers loop start
         foreach ($Computer in $ComputerName) {
@@ -114,7 +115,9 @@ function Get-DiskSpace {
 
                 }
 
-                $allDisks = Invoke-Expression $arg |
+                $allDisks = Invoke-Expression $arg 
+                
+                $ComputerDisks += $allDisks |
                     Select-Object @{n = "ComputerName"; e = {$_.PSCOmputerName}},
                 @{n = "Type"; e = {$typeHash.item([int]$_.DriveType)}},
                 @{n = "NetworkPath"; e = {$_.ProviderName}},
@@ -123,18 +126,7 @@ function Get-DiskSpace {
                 @{n = "FreeSpace($SizeIn)"; e = {"{0:N2}" -f ($_.FreeSpace / $sizeDivide)}},
                 @{n = "FreeSpace(%)"; e = {"{0:N0}" -f (($_.FreeSpace / $_.Size) * 100)}},
                 @{n = "UsedSpace($SizeIn)"; e = {"{0:N2}" -f (($_.Size - $_.FreeSpace) / $sizeDivide)}}
-
-                #show results:    
-                Write-Host -ForegroundColor Yellow "Disks information for computer " -NoNewline
-                Write-Host -ForegroundColor Green  "$Computer" -NoNewline
-                Write-Host -ForegroundColor Yellow ":"
     
-                $allDisks | Format-Table -AutoSize
-
-                if ($ExportPath) {
-                    Write-Verbose "Parameter ExportPath specified, exporting data to CSV file..."
-                    $allDisks | Export-Csv -Path $ExportPath -Delimiter ";" -NoTypeInformation -Append
-                }
     
             }
             
@@ -151,11 +143,23 @@ function Get-DiskSpace {
 
         } #end of Computers loop
 
-
     } #end of Process
 
     end {
-        if ($credentials) {Clear-Variable credentials}
+
+        if ($ComputerDisks.Count -gt 0) {
+
+            if ($ExportPath) {
+                Write-Verbose "Parameter ExportPath specified, exporting data to CSV file..."
+                $ComputerDisks | Export-Csv -Path $ExportPath -Delimiter ";" -NoTypeInformation
+            }
+
+            Write-Verbose -Message "Disk information:"
+            
+            $ComputerDisks
+
+        }
+
 
         Write-Verbose "End of Get-DiskSpace function."
     }
@@ -163,9 +167,5 @@ function Get-DiskSpace {
 
 } #end of Get-DiskSpace
 
-<#
-To Do:
-Add error detection
-Add SUM for each individual server
 
-#>
+#TODO Add SUM values for each individual computer
