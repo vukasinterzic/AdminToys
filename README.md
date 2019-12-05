@@ -30,6 +30,9 @@ Collect basic information about specified servers or all servers found in Active
 #### Get-PublicIP
 This function finds the Public IP address of local or remote computer and returns it. It can run with multiple computers and use credentials if needed.
 
+#### Get-GeoIPInfo
+This function find geographical information about public IP address, including link to the map.
+
 #### StampFile
 Add date and time stamp to the end of the file name. You can use it to rename the existing file or to make a copy of that file with date and time added to the end of the original name.
 
