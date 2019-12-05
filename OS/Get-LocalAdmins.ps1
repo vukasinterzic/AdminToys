@@ -158,3 +158,5 @@ function Get-LocalAdmins {
 
 } #End of Get-LocalAdmins
 
+
+#TODO Add optional features from FullServerInfo - if admin is group, collect gorup members recursively

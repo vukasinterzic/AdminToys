@@ -24,7 +24,7 @@ None; Computer(s) name(s); SizeIn; ExportPath
 Size, FreeSpace, UsedSpace, Totals
 
 .EXAMPLE
-C:\PS> Get-DiskSpace
+C:\PS> Get-DiskSpace -SizeIn GB | ? DeviceId -eq "C:"
 
 .EXAMPLE
 C:\PS> Get-DiskSpace -ComputerName COMPUTERNAME1 -SizeIn TB -UseCredentials -ExportPath C:\export.csv
