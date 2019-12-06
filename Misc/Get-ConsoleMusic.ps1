@@ -1,6 +1,28 @@
-function Play-ConsoleMusic {
-    [CmdletBinding()]
+<#
+.SYNOPSIS
+Play melody generated in console
 
+.DESCRIPTION
+Fun little function that plays songs directly from console. Currently available melodies: Super Mario, Tetris, Mission Impossible, Star Wars.
+
+.PARAMETER Melody
+Select one of the supported melodies. If not selected it plays random melody
+
+.INPUTS
+Melody name
+
+.OUTPUTS
+
+.EXAMPLE
+Get-ConsoleMusic -Melody Mario
+
+.LINK
+https://github.com/vukasinterzic/AdminToolBox
+
+#>
+
+function Get-ConsoleMusic {
+    [CmdletBinding()]
     param 
     (      
         [Parameter()]  
@@ -165,3 +187,5 @@ function Play-ConsoleMusic {
     } #end of Melody switch
 
 }
+
+#FIXME Add custom error message if unsupported melody name is typed
