@@ -59,21 +59,8 @@ function Get-ModuleHelp {
     $commands | ForEach-Object { $matchHash.Add($n++, "$_") }
 
     $selection = ""
-    Write-Host -ForegroundColor Green "Hi there. Thank you for using this module.
-    Here you can find useful funcitons created to make your job easier.
 
-    Using this module does not require more than a basic knowledge of PowerShell.
-    However, it does not contain all the tools that you should ever need. 
-    It contains only functions that are not part of PowerShell itself. Everything that already exists as a simple CMDLET is not part of this module.
-
-    In case you have any suggestions or you want to report a bug, please send me an email.
-
-    Vukasin Terzic
-    terzic@kpcs.cz
-    "
-
-
-    Write-Host -ForegroundColor Yellow "List of all custom functions that are included in this module:"
+    Write-Host -ForegroundColor Yellow "List of all functions that are included in this module:"
 
     #write list of all commands in module
     foreach ($ln in $matchHash.GetEnumerator()) {

@@ -39,6 +39,9 @@ This function find geographical information about public IP address, including l
 #### StampFile
 Add date and time stamp to the end of the file name. You can use it to rename the existing file or to make a copy of that file with date and time added to the end of the original name.
 
+#### Invoke-Unzip
+Zip file extraction by attempting 3 methods, in case prerequisites are not met.
+
 #### Get-ConsoleMusic
 Fun little function that plays songs directly from console. Currently available melodies: Super Mario, Tetris, Mission Impossible, Star Wars.
 
