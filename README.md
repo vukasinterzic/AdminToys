@@ -54,6 +54,8 @@ Converts your Text to
 Get-AccountFromSID, Get-SIDFromAccount, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-FirewallRules, Copy-MyItem, Install-ModuleFromGitHub, Update-ModuleFromGitHub, Get-ADGroupMembershipChanges, Get-ComputerBitlockerInfo, Set-PingFirewallRule, Get-Shares, Get-AdministrativeEvents, Write-ToEventLog, Get-ScheduledTask, SayThis, Export-ScriptsToModule, Copy-DownloadedModule  ...
 
 ## Planned changes
+#FIXME Rename module and repository and give it unique name
+
 #TODO Start Changelog.md file and track all changes in repository
 
 #TODO Add more functions
