@@ -36,6 +36,9 @@ This function finds the Public IP address of local or remote computer and return
 #### Get-GeoIPInfo
 This function find geographical information about public IP address, including link to the map.
 
+#### Get-MACVendor
+Uses online up-to-date information to identify vendor of MAC address that is provided.
+
 #### StampFile
 Add date and time stamp to the end of the file name. You can use it to rename the existing file or to make a copy of that file with date and time added to the end of the original name.
 
