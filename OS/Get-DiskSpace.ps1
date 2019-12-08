@@ -6,7 +6,7 @@ This function help you find and export disk space information from local or remo
 This function help you find and export disk space information from local or remote computer. Size is automatically converted to MB,GB or TB.
 
 .PARAMETER ComputerName
-Specifies the name computer or computers.
+Specifies the name of computer or computers.
 
 .PARAMETER SizeIn
 Specify in which unit will disk size be displayed. It can be in MB, GB or TB. Default size is in GB
