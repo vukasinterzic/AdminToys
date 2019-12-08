@@ -40,6 +40,7 @@ https://github.com/vukasinterzic/AdminToolBox
 
 #>
  
+#wtf?
 function Get-NetAdapterInfo {
 
     [CmdletBinding()]
@@ -87,7 +88,7 @@ function Get-NetAdapterInfo {
                 if ($UseCredentials) {
                     #creating cmdlet with parameter -Credentials. Variables have escape character (`) so their content is not added to $arg string.
                     $arg1 = "Get-WmiObject -Class Win32_NetworkAdapterConfiguration -ComputerName `$Computer -Credential `$Credential -ErrorAction Stop"
-                    $cim1 = New-CimSession -ComputerName $Computer -Credential $Credential -ErrorAction Stop
+                    #$cim1 = New-CimSession -ComputerName $Computer -Credential $Credential -ErrorAction Stop
                     $arg2 = "Get-NetAdapter -CimSession `$cim1"
 
                 }
