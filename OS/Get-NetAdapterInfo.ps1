@@ -1,46 +1,37 @@
 ﻿<#
 .SYNOPSIS
-This function help you find and export disk space information from local or remote computer. 
+Collects all information regarding network from local or remote computers.
 
 .DESCRIPTION
-This function help you find and export disk space information from local or remote computer. Size is automatically converted to MB,GB or TB.
+Colects all information from Win32_NetworkAdapterConfiguration and Get-NetAdapter, and combines it in one object. Can be combined with Get-MACVendor, Get-PublicIP, Get-GeoIPInfo
 
 .PARAMETER ComputerName
-Specifies the name computer or computers.
-
-.PARAMETER SizeIn
-Specify in which unit will disk size be displayed. It can be in MB, GB or TB. Default size is in GB
+Specifies the name of computer or computers.
 
 .PARAMETER UseCredentials
 Switch parameter. If used, you will be asked to provide credentials that are used to access computers.
 
-.PARAMETER ExportPath
-Specify export file path, including file name.
 
 .INPUTS
-None; Computer(s) name(s); SizeIn; ExportPath
+None; Computer(s) name(s);
 
 .OUTPUTS
-Size, FreeSpace, UsedSpace, Totals
 
 .EXAMPLE
-C:\PS> Get-DiskSpace -SizeIn GB | ? DeviceId -eq "C:"
+C:\PS> Get-NetAdapterInfo
 
 .EXAMPLE
-C:\PS> Get-DiskSpace -ComputerName COMPUTERNAME1 -SizeIn TB -UseCredentials -ExportPath C:\export.csv
+C:\PS> Get-NetAdapterInfo -ComputerName COMPUTERNAME1 -UseCredentials
 
 .EXAMPLE
-C:\PS> $ComputerList | Get-DiskSpace | Format-Table -GroupBy ComputerName
-
-.EXAMPLE
-C:\PS> $ComputerList | % { Get-DiskSpace -ComputerName $_ }
+C:\PS> $ComputerList | % { Get-NetAdapterInfo -ComputerName $_ }
 
 .LINK
 https://github.com/vukasinterzic/AdminToolBox
 
 #>
  
-#wtf?
+
 function Get-NetAdapterInfo {
 
     [CmdletBinding()]
@@ -79,7 +70,7 @@ function Get-NetAdapterInfo {
 
     process {
 
-        foreach ($Computer in $Computers) {
+        foreach ($Computer in $ComputerName) {
 
             Try {
 
