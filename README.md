@@ -25,10 +25,13 @@ Get list of users and groups with local admin rights on local or remote computer
 Get the exact uptime and last bootup time of local or remote computer or computers.
 
 #### Get-ADServersInfo
-Collect basic information about specified servers or all servers found in Active Directory. Collected information is useful for having basic overview of where they are, what systems are they running and what are they used for.
+Collect basic information about specified servers or all servers found in Active Directory. Collected information is useful for having overview of where they are, in which site, are they physical or virtual and on wich physical host, what systems are they running and what are they used for.
 
 #### Get-InstalledFeatures
 This function collects the list of installed Windows features from remote or local computer with Server OS.
+
+#### Get-NetAdapterInfo
+Colects all information from Win32_NetworkAdapterConfiguration and Get-NetAdapter, and combines it in one object.
 
 #### Get-PublicIP
 This function finds the Public IP address of local or remote computer and returns it. It can run with multiple computers and use credentials if needed.
