@@ -187,7 +187,7 @@ function Get-NetAdapterInfo {
 
     Write-Verbose -Message "Running function Get-NetAdapterInfo..."
 
-    $global:NetAdapterInfo = @()
+    $NetAdapterInfo = @()
     $NetAdapterInfoPart1 = @()
     $NetAdapterInfoPart2 = @()
 
@@ -216,7 +216,7 @@ function Get-NetAdapterInfo {
                 $arg2 = "Get-NetAdapter -CimSession `$cim1"
 
             }
-            elseif ($Computer -eq "$env:COMPUTERNAME") {
+            elseif (($Computer -eq $env:COMPUTERNAME) -or ($Computer -eq ".") -or ($Computer -eq "localhost")) {
                 #cmdlet without -Credentials and without -ComputerName parameters
                 $arg1 = "Get-WmiObject -Class Win32_NetworkAdapterConfiguration -ErrorAction Stop"
                 $arg2 = "Get-NetAdapter"
