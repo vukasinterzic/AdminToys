@@ -68,10 +68,10 @@ Get-AccountFromSID, Get-SIDFromAccount, Get-ShutDown, Get-LogOnLogOut, Get-Insta
 ## Planned changes
 #FIXME Rename module and repository and give it unique name
 
+#FIXME Add test if computers are accessible to prevent errors - to all functions where it is missing
+
 #TODO Start Changelog.md file and track all changes in repository
 
 #TODO Add more functions
 
-#TODO Add functions from FullServerInfo script
-
-#TODO Add guide on how to install module from library/github
+#TODO Add guide on how to install module from github/gallery
