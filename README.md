@@ -3,6 +3,7 @@ This is the place where I keep the code for my AdminToolBox PowerShell module.
 
 Module contains bunch of functions that are helping with everyday taks. Functions are saved in individual folders and they are fetched inside psm1 file.
 
+Functions are designed in the way so they can be used individually, or as a part of a larger script. If you use variable $Credential to store credentials, you won't need to enter credentials for each function. Individual functions do not check for remote computer accessibility. You can do that once and then pass only accessible computers to individual functions. It is designed like this to avoid multiple checks.
 
 ## Functions:
 
@@ -63,14 +64,12 @@ Converts your Text to
 ```
 
 ## Work in progress functions
-Get-SCOMObjectsInMaintenance, Get-SCOMMonitoredVMs, Get-SCOMNotMonitoredVMs, Get-SCOMAgentHealth, Get-SCOMEventsForVM, Get-DPMProtectedVMs, Get-DPMUnprotectedVMs, Get-iDRACInfo
+Get-SCOMObjectsInMaintenance, Get-SCOMMonitoredVMs, Get-SCOMNotMonitoredVMs, Get-SCOMAgentHealth, Get-SCOMEventsForVM, Get-DPMProtectedVMs, Get-DPMUnprotectedVMs, Get-DPMServerInfo (storage, network, jobs, cloud etc..), Get-iDRACInfo
 
-Optional: Get-AccountFromSID, Get-SIDFromAccount, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-FirewallRules, Copy-MyItem, Install-ModuleFromGitHub, Update-ModuleFromGitHub, Get-ADGroupMembershipChanges, Get-ComputerBitlockerInfo, Set-PingFirewallRule, Get-Shares, Get-AdministrativeEvents, Write-ToEventLog, Get-ScheduledTask, SayThis, Export-ScriptsToModule, Copy-DownloadedModule  ...
+Optional: Set-Elevation, Get-AccountFromSID, Get-SIDFromAccount, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-FirewallRules, Copy-MyItem, Install-ModuleFromGitHub, Update-ModuleFromGitHub, Get-ADGroupMembershipChanges, Get-ComputerBitlockerInfo, Set-PingFirewallRule, Get-Shares, Get-AdministrativeEvents, Write-ToEventLog, Get-ScheduledTask, SayThis, Export-ScriptsToModule, Copy-DownloadedModule  ...
 
 ## Planned changes
 #FIXME Rename module and repository and give it unique name
-
-#FIXME Add test if computers are accessible to prevent errors - to all functions where it is missing
 
 #TODO Start Changelog.md file and track all changes in repository
 
