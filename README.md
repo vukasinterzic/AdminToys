@@ -43,6 +43,9 @@ This function find geographical information about public IP address, including l
 #### Get-MACVendor
 Uses online up-to-date information to identify vendor of MAC address that is provided.
 
+#### Get-DPMProtectedVMs
+Gets the list of all items that are protected by DPM
+
 #### StampFile
 Add date and time stamp to the end of the file name. You can use it to rename the existing file or to make a copy of that file with date and time added to the end of the original name.
 
@@ -64,7 +67,7 @@ Converts your Text to
 ```
 
 ## Work in progress functions
-Get-SCOMObjectsInMaintenance, Get-SCOMMonitoredVMs, Get-SCOMNotMonitoredVMs, Get-SCOMAgentHealth, Get-SCOMEventsForVM, Get-DPMProtectedVMs, Get-DPMUnprotectedVMs, Get-DPMServerInfo (storage, network, jobs, cloud etc..), Get-iDRACInfo
+Get-SCOMObjectsInMaintenance, Get-SCOMMonitoredVMs, Get-SCOMNotMonitoredVMs, Get-SCOMAgentHealth, Get-SCOMEventsForVM, Get-DPMUnprotectedVMs, Get-DPMServerInfo (storage, network, jobs, cloud etc..), Get-iDRACInfo
 
 Optional: Set-Elevation, Get-AccountFromSID, Get-SIDFromAccount, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-FirewallRules, Copy-MyItem, Install-ModuleFromGitHub, Update-ModuleFromGitHub, Get-ADGroupMembershipChanges, Get-ComputerBitlockerInfo, Set-PingFirewallRule, Get-Shares, Get-AdministrativeEvents, Write-ToEventLog, Get-ScheduledTask, SayThis, Export-ScriptsToModule, Copy-DownloadedModule  ...
 

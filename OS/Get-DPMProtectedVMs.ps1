@@ -37,6 +37,7 @@ https://github.com/vukasinterzic/AdminToolBox
 Write-Verbose -Message "Script must run in console as Administrator, otherwise it will not connect to the DPM server."
 #Requires -RunAsAdministrator
 
+
 function Get-DPMProtectedVMs {
     [CmdletBinding()]
     param (
@@ -91,3 +92,4 @@ function Get-DPMProtectedVMs {
 
 #TODO Add disk size, add location of backup, protection type/method
 #TODO Remote to DPM server - eliminate requiremenets for Module. Allows usage of credentials.
+#TODO Remoting with elevated access
