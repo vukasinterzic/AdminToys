@@ -46,6 +46,9 @@ Uses online up-to-date information to identify vendor of MAC address that is pro
 #### Get-DPMProtectedVMs
 Gets the list of all items that are protected by DPM.
 
+#### Test-Elevation
+Check if PowerShell console is opened as Administrator. It returns Boolean value.
+
 #### StampFile
 Add date and time stamp to the end of the file name. You can use it to rename the existing file or to make a copy of that file with date and time added to the end of the original name.
 
