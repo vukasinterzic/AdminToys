@@ -63,7 +63,9 @@ Converts your Text to
 ```
 
 ## Work in progress functions
-Get-AccountFromSID, Get-SIDFromAccount, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-FirewallRules, Copy-MyItem, Install-ModuleFromGitHub, Update-ModuleFromGitHub, Get-ADGroupMembershipChanges, Get-ComputerBitlockerInfo, Set-PingFirewallRule, Get-Shares, Get-AdministrativeEvents, Write-ToEventLog, Get-ScheduledTask, SayThis, Export-ScriptsToModule, Copy-DownloadedModule  ...
+Get-SCOMObjectsInMaintenance, Get-SCOMMonitoredVMs, Get-SCOMNotMonitoredVMs, Get-SCOMAgentHealth, Get-SCOMEventsForVM, Get-DPMProtectedVMs, Get-DPMUnprotectedVMs, Get-iDRACInfo
+
+Optional: Get-AccountFromSID, Get-SIDFromAccount, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-FirewallRules, Copy-MyItem, Install-ModuleFromGitHub, Update-ModuleFromGitHub, Get-ADGroupMembershipChanges, Get-ComputerBitlockerInfo, Set-PingFirewallRule, Get-Shares, Get-AdministrativeEvents, Write-ToEventLog, Get-ScheduledTask, SayThis, Export-ScriptsToModule, Copy-DownloadedModule  ...
 
 ## Planned changes
 #FIXME Rename module and repository and give it unique name
