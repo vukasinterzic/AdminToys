@@ -3,7 +3,7 @@ This is the place where I keep the code for my AdminToolBox PowerShell module.
 
 Module contains bunch of functions that are helping with everyday taks. Functions are saved in individual folders and they are fetched inside psm1 file.
 
-Functions are designed in the way so they can be used individually, or as a part of a larger script. If you use variable $Credential to store credentials, you won't need to enter credentials for each function. Individual functions do not check for remote computer accessibility. You can do that once and then pass only accessible computers to individual functions. It is designed like this to avoid multiple checks.
+Functions are designed in the way so they can be used individually, or as a part of a larger script. If you use variable $Credential to store credentials, you won't need to enter credentials for each function. Individual functions do not check for remote computer accessibility. You can do that once and then pass only accessible computers to individual functions. It is designed like this to avoid multiple checks. Results can be saved in new object, and then presented and sorted in various formats.
 
 ## Functions:
 
@@ -44,7 +44,7 @@ This function find geographical information about public IP address, including l
 Uses online up-to-date information to identify vendor of MAC address that is provided.
 
 #### Get-DPMProtectedVMs
-Gets the list of all items that are protected by DPM
+Gets the list of all items that are protected by DPM.
 
 #### StampFile
 Add date and time stamp to the end of the file name. You can use it to rename the existing file or to make a copy of that file with date and time added to the end of the original name.
