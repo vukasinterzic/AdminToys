@@ -91,5 +91,6 @@ function Get-DPMProtectedVMs {
 
 
 #TODO Add disk size, add location of backup, protection type/method
-#TODO Remote to DPM server - eliminate requiremenets for Module. Allows usage of credentials.
-#TODO Remoting with elevated access
+#TODO Add option to specify ProtectionGroup
+#FIXME Remote to DPM server - eliminate requiremenets for Module. Allows usage of credentials.
+#FIXME Remoting with elevated access
