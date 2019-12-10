@@ -58,18 +58,18 @@ function Get-GeoIPInfo {
             } else {
                 Write-Verbose -Message "IP address is valid PUBLIC IP address. Getting GEO info..."
 
-                <#  I switched from ipstack.com to ip-api.com because first one didn't contain ISP info in free version, location was not accurate and and it required access key
+                <#  Switched from ipstack.com to ip-api.com because first one didn't contain ISP info in free version, location was not accurate and and it required access key
                     #You need to use your access key here in order to make it work. To get it, create free account on www.ipstack.com
                     $AccessKey = "813e23240f5899917a13c29e6f2212bc" #it will stop working if overused
                     $url = "http://api.ipstack.com/$($IP)?access_key=$($AccessKey)&format=1&output=json"
                 #>
-                
-                #limit is 45 requests per minute from single IP
-                $url = "http://ip-api.com/json/$IP?fields=16515071" #for different field selection URL go to https://ip-api.com/docs/api:json
 
+                #limit is 45 requests per minute from single IP
+                $url = "http://ip-api.com/json/"+$IP+"?fields=16515071" #for different field selection URL go to https://ip-api.com/docs/api:json
+  
                 $GeoInfo = Invoke-RestMethod -Method Get -URI $url
 
-                $GoogleMapsLink = "http://maps.google.com/maps?q=$($GeoInfo.latitude),$($GeoInfo.longitude)"
+                $GoogleMapsLink = "http://maps.google.com/maps?q=$($GeoInfo.lat),$($GeoInfo.lon)"
 
                 #Create custom object with all collected properties
                 $obj = New-Object psobject
@@ -79,7 +79,7 @@ function Get-GeoIPInfo {
                 $obj | Add-Member -MemberType NoteProperty -Name AS -Value $GeoInfo.as
                 $obj | Add-Member -MemberType NoteProperty -Name ASname -Value $GeoInfo.asname
                 $obj | Add-Member -MemberType NoteProperty -Name ReverseLookup -Value $GeoInfo.reverse #this is slow, comment out if not needed
-                $obj | Add-Member -MemberType NoteProperty -Name Mobile -Value $GeoInfo.mobile #$(if(!$GeoInfo.mobile) {False} else {$GeoInfo}}
+                $obj | Add-Member -MemberType NoteProperty -Name Mobile -Value $GeoInfo.mobile
                 $obj | Add-Member -MemberType NoteProperty -Name Proxy -Value $GeoInfo.proxy
                 $obj | Add-Member -MemberType NoteProperty -Name ContinentCode -Value $GeoInfo.continentCode
                 $obj | Add-Member -MemberType NoteProperty -Name ContinentName -Value $GeoInfo.continent
@@ -92,8 +92,8 @@ function Get-GeoIPInfo {
                 $obj | Add-Member -MemberType NoteProperty -Name ZipCode -Value $GeoInfo.zip
                 $obj | Add-Member -MemberType NoteProperty -Name TimeZone -Value $GeoInfo.timezone
                 $obj | Add-Member -MemberType NoteProperty -Name Currency -Value $GeoInfo.currency
-                $obj | Add-Member -MemberType NoteProperty -Name Latitude -Value $GeoInfo.latitude
-                $obj | Add-Member -MemberType NoteProperty -Name Longitude -Value $GeoInfo.longitude
+                $obj | Add-Member -MemberType NoteProperty -Name Latitude -Value $GeoInfo.lat
+                $obj | Add-Member -MemberType NoteProperty -Name Longitude -Value $GeoInfo.lon
                 #$obj | Add-Member -MemberType NoteProperty -Name CountryCapital -Value 
                 #$obj | Add-Member -MemberType NoteProperty -Name Language -Value 
                 #$obj | Add-Member -MemberType NoteProperty -Name CountryCallingCode -Value 
