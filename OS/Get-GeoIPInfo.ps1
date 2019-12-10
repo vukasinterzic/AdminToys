@@ -58,9 +58,14 @@ function Get-GeoIPInfo {
             } else {
                 Write-Verbose -Message "IP address is valid PUBLIC IP address. Getting GEO info..."
 
-                #You need to use your access key here in order to make it work. To get it, create free account on www.ipstack.com
-                $AccessKey = "813e23240f5899917a13c29e6f2212bc"
-                $url = "http://api.ipstack.com/$($IP)?access_key=$($AccessKey)&format=1&output=json"
+                <#  I switched from ipstack.com to ip-api.com because first one didn't contain ISP info in free version, location was not accurate and and it required access key
+                    #You need to use your access key here in order to make it work. To get it, create free account on www.ipstack.com
+                    $AccessKey = "813e23240f5899917a13c29e6f2212bc" #it will stop working if overused
+                    $url = "http://api.ipstack.com/$($IP)?access_key=$($AccessKey)&format=1&output=json"
+                #>
+                
+                #limit is 45 requests per minute from single IP
+                $url = "http://ip-api.com/json/$IP?fields=16515071" #for different field selection URL go to https://ip-api.com/docs/api:json
 
                 $GeoInfo = Invoke-RestMethod -Method Get -URI $url
 
@@ -68,22 +73,31 @@ function Get-GeoIPInfo {
 
                 #Create custom object with all collected properties
                 $obj = New-Object psobject
-                $obj | Add-Member -MemberType NoteProperty -Name IP -Value $GeoInfo.ip
-                $obj | Add-Member -MemberType NoteProperty -Name Type -Value $GeoInfo.type
-                $obj | Add-Member -MemberType NoteProperty -Name ContinentCode -Value $GeoInfo.continent_code
-                $obj | Add-Member -MemberType NoteProperty -Name ContinentName -Value $GeoInfo.continent_name
-                $obj | Add-Member -MemberType NoteProperty -Name CountryCode -Value $GeoInfo.country_code
-                $obj | Add-Member -MemberType NoteProperty -Name CountryName -Value $GeoInfo.country_name
-                $obj | Add-Member -MemberType NoteProperty -Name RegionCode -Value $GeoInfo.region_code
-                $obj | Add-Member -MemberType NoteProperty -Name RegionName -Value $GeoInfo.region_name
+                $obj | Add-Member -MemberType NoteProperty -Name IP -Value $GeoInfo.query
+                $obj | Add-Member -MemberType NoteProperty -Name Status -Value $GeoInfo.status
+                $obj | Add-Member -MemberType NoteProperty -Name ISP -Value $GeoInfo.isp
+                $obj | Add-Member -MemberType NoteProperty -Name AS -Value $GeoInfo.as
+                $obj | Add-Member -MemberType NoteProperty -Name ASname -Value $GeoInfo.asname
+                $obj | Add-Member -MemberType NoteProperty -Name ReverseLookup -Value $GeoInfo.reverse #this is slow, comment out if not needed
+                $obj | Add-Member -MemberType NoteProperty -Name Mobile -Value $GeoInfo.mobile #$(if(!$GeoInfo.mobile) {False} else {$GeoInfo}}
+                $obj | Add-Member -MemberType NoteProperty -Name Proxy -Value $GeoInfo.proxy
+                $obj | Add-Member -MemberType NoteProperty -Name ContinentCode -Value $GeoInfo.continentCode
+                $obj | Add-Member -MemberType NoteProperty -Name ContinentName -Value $GeoInfo.continent
+                $obj | Add-Member -MemberType NoteProperty -Name CountryCode -Value $GeoInfo.countryCode
+                $obj | Add-Member -MemberType NoteProperty -Name CountryName -Value $GeoInfo.country
+                $obj | Add-Member -MemberType NoteProperty -Name RegionCode -Value $GeoInfo.region
+                $obj | Add-Member -MemberType NoteProperty -Name RegionName -Value $GeoInfo.regionName
                 $obj | Add-Member -MemberType NoteProperty -Name City -Value $GeoInfo.city
+                $obj | Add-Member -MemberType NoteProperty -Name District -Value $GeoInfo.district
                 $obj | Add-Member -MemberType NoteProperty -Name ZipCode -Value $GeoInfo.zip
+                $obj | Add-Member -MemberType NoteProperty -Name TimeZone -Value $GeoInfo.timezone
+                $obj | Add-Member -MemberType NoteProperty -Name Currency -Value $GeoInfo.currency
                 $obj | Add-Member -MemberType NoteProperty -Name Latitude -Value $GeoInfo.latitude
                 $obj | Add-Member -MemberType NoteProperty -Name Longitude -Value $GeoInfo.longitude
-                $obj | Add-Member -MemberType NoteProperty -Name CountryCapital -Value $GeoInfo.location.capital
-                $obj | Add-Member -MemberType NoteProperty -Name Language -Value $GeoInfo.location.languages.name
-                $obj | Add-Member -MemberType NoteProperty -Name CountryCallingCode -Value $GeoInfo.location.calling_code
-                $obj | Add-Member -MemberType NoteProperty -Name IsInEU -Value $GeoInfo.location.is_eu
+                #$obj | Add-Member -MemberType NoteProperty -Name CountryCapital -Value 
+                #$obj | Add-Member -MemberType NoteProperty -Name Language -Value 
+                #$obj | Add-Member -MemberType NoteProperty -Name CountryCallingCode -Value 
+                #$obj | Add-Member -MemberType NoteProperty -Name IsInEU -Value 
                 $obj | Add-Member -MemberType NoteProperty -Name GoogleMapsLink -Value $GoogleMapsLink
 
                 $GeoIPInfo += $obj
@@ -105,5 +119,6 @@ function Get-GeoIPInfo {
 
 }
 
-#TODO Add support for IPv6
-#FIXME Switch API to IP-API instead, because it contains information about ISP and it doesn't require registration key
+#TODO Add support for IPv6 input
+#TODO Add country information from country API https://restcountries.eu
+#FIXME Add limitation to 45 requests per minute

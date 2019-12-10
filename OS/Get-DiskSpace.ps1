@@ -166,6 +166,3 @@ function Get-DiskSpace {
 
 
 } #end of Get-DiskSpace
-
-
-#TODO Add SUM values for each individual computer
