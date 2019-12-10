@@ -122,3 +122,4 @@ function Get-GeoIPInfo {
 #TODO Add support for IPv6 input
 #TODO Add country information from country API https://restcountries.eu
 #FIXME Add limitation to 45 requests per minute
+#FIXME IP-API can detect public IP of requestor. Make parameter IPs not mandatory, so if IP is not provided it will do the check for current IP
