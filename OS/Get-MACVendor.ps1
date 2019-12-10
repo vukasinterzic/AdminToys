@@ -8,6 +8,9 @@ Uses online up-to-date information to identify vendor of MAC address that is pro
 .PARAMETER MACs
 Specifies the one or more MAC addresses that you want to check
 
+.PARAMETER ExportPath
+Specify export file path, including file name.
+
 .INPUTS
 MACs
 
@@ -33,8 +36,14 @@ function Get-MACVendor {
         [Parameter(Mandatory = $true,
             ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true)]
-        [array]$MACs
+        [array]$MACs,
+        
+        [Parameter(ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true)]
+        [string]$ExportPath
     )
+    
+    
     Write-Verbose -Message "Running function Get-MACVendor..."
 
     $MACVendor = @()
@@ -75,11 +84,16 @@ function Get-MACVendor {
 
     }
 
-    if ($MACVendor) {
+    if ($MACVendor.Count -gt 0) {
+
+        if ($ExportPath) {
+            Write-Verbose "Parameter ExportPath specified, exporting data to CSV file..."
+            $MACVendor | Export-Csv -Path $ExportPath -Delimiter ";" -NoTypeInformation
+        }
+
+        Write-Verbose -Message "MAC Vendor information:"
         $MACVendor
     }
     
     Write-Verbose -Message "End of function Get-MACVendor."
 }
-
-#TODO Add ExportPath

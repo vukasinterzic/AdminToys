@@ -143,7 +143,7 @@ function Get-LocalAdmins {
 
                 Write-Verbose -Message "ExportPath parameter selected. Exporting results to file."
                 #export CSV file
-                $report | Export-Csv -Path $ExportPath -Delimiter ";" -NoTypeInformation -Append
+                $ComputerAdmins | Export-Csv -Path $ExportPath -Delimiter ";" -NoTypeInformation -Append
                 
             }
 
