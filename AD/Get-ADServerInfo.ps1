@@ -116,7 +116,7 @@ function Get-ADServerInfo {
         if (($UseCredentials) -and (!$Credential)) {
             Write-Verbose -Message "Parameter UseCredentials is used. Getting user credentials..."
             Write-Host -ForegroundColor Cyan "Enter your credentials:"
-            [securestring]$Credential = Get-Credential
+            $Credential = Get-Credential
         }
         
         $global:onlineServers = @()

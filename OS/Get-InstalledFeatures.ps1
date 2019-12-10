@@ -57,7 +57,7 @@ function Get-InstalledFeatures {
         $InstalledFeatures = @()
 
         if (($UseCredentials) -and (!$Credential)) {
-            [securestring]$Credential = Get-Credential -Message "Enter credentials"
+            $Credential = Get-Credential -Message "Enter credentials"
         }
 
         if (($ComputerName -eq $env:COMPUTERNAME) -or ($ComputerName -eq ".") -or ($ComputerName -eq "localhost")) {
