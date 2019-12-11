@@ -64,7 +64,7 @@ function Convert-TextToASCIIArt {
             } else {
 
                 Write-Verbose -Message "Font is not valid. End of function."
-                throw "Invalid font name provided. For list and preview of available fonts check http://artii.herokuapp.com/fonts_list"
+                throw "Invalid font name provided. For list and preview of available fonts check Font-Preview.html or generate new one."
             }
 
         } else {
@@ -93,7 +93,7 @@ function Convert-TextToASCIIArt {
 }
 
 <#
-#Use this section to get fresh list and preview of each font, and save it to HTML page.
+#Use this section to get fresh list and preview of each font and save it to the HTML page.
 
 $FontsPageContent = (Invoke-WebRequest "http://artii.herokuapp.com/fonts_list").Content
 $FontsList = @()
