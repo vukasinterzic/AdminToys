@@ -8,6 +8,9 @@ Convert text. Output is also copied to sclipboard.
 .PARAMETER Text
 Add text. Parameter is mandatory.
 
+.PARAMETER Font
+Select different font of your text. You can find font list and preview here: 
+
 .INPUTS
 Text;
 
@@ -28,7 +31,12 @@ function Convert-TextToASCIIArt {
         [Parameter(Mandatory = $true,
             ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true)]
-        [string] $Text
+        [string] $Text,
+
+        [Parameter(Mandatory = $false,
+            ValueFromPipeline = $true,
+            ValueFromPipelineByPropertyName = $true)]
+        [string] $Font
 
     )
 
