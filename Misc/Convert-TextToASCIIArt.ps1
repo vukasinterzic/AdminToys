@@ -9,7 +9,7 @@ Convert text. Output is also copied to sclipboard.
 Add text. Parameter is mandatory.
 
 .PARAMETER Font
-Select different font of your text. You can find font preview in Font-Preview.html page
+Select different font of your text. You can find font preview in Font-Preview.html file
 
 .INPUTS
 Text;
@@ -51,10 +51,24 @@ function Convert-TextToASCIIArt {
         if ($Font) {
             Write-Verbose -Message "Font selected. Checking if font name is valid..."
             Write-Verbose -Message "Getting the list of fonts..."
-            
 
-            $URL = "http://artii.herokuapp.com/make?text="+$Text+"&font="+$Font
+            $FontsPageContent = (Invoke-WebRequest "http://artii.herokuapp.com/fonts_list").Content
+            $FontsList = @()
+            $FontsList = $FontsPageContent.Split([Environment]::NewLine)
+            
+            if ($FontsList -contains $Font) {
+
+                Write-Verbose -Message "Font is valid. Creating URL..."
+                $URL = "http://artii.herokuapp.com/make?text="+$Text+"&font="+$Font
+
+            } else {
+
+                Write-Verbose -Message "Font is not valid. End of function."
+                throw "Invalid font name provided. For list and preview of available fonts check http://artii.herokuapp.com/fonts_list"
+            }
+
         } else {
+            Write-Verbose -Message "Font not selected.Creating URL..."
             $URL = "http://artii.herokuapp.com/make?text="+$Text
         }
 
@@ -79,13 +93,11 @@ function Convert-TextToASCIIArt {
 }
 
 <#
-#>
-
-#Get the font list:
+#Use this section to get fresh list and preview of each font, and save it to HTML page.
 
 $FontsPageContent = (Invoke-WebRequest "http://artii.herokuapp.com/fonts_list").Content
-$fonts = @()
-$fonts = $FontsPageContent.Split([Environment]::NewLine)
+$FontsList = @()
+$FontsList = $FontsPageContent.Split([Environment]::NewLine)
 
 $Body = @()
 $Body +="
@@ -101,7 +113,7 @@ $Body +="
 <tr>
 "
 $FontPreview = @()
-foreach ($Font in $Fonts) {
+foreach ($Font in $FontsList) {
 
     
     $URL = "http://artii.herokuapp.com/make?text=Text&font="+$Font
@@ -120,7 +132,4 @@ $Body += "</table></body></html>"
 
 $Body | Out-File "Font-Preview.html"
 
-
-
-
-#TODO Add font selection option
+#>
