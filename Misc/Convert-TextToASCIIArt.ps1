@@ -58,17 +58,17 @@ function Convert-TextToASCIIArt {
             
             if ($FontsList -contains $Font) {
 
-                Write-Verbose -Message "Font is valid. Creating URL..."
+                Write-Verbose -Message "Font name is valid. Creating URL..."
                 $URL = "http://artii.herokuapp.com/make?text="+$Text+"&font="+$Font
 
             } else {
 
-                Write-Verbose -Message "Font is not valid. End of function."
+                Write-Verbose -Message "Font name is not valid. End of function."
                 throw "Invalid font name provided. For list and preview of available fonts check Font-Preview.html or generate new one."
             }
 
         } else {
-            Write-Verbose -Message "Font not selected.Creating URL..."
+            Write-Verbose -Message "Font not selected. Creating URL..."
             $URL = "http://artii.herokuapp.com/make?text="+$Text
         }
 
