@@ -25,7 +25,7 @@ Get list of users and groups with local admin rights on local or remote computer
 #### Get-Uptime
 Get the exact uptime and last bootup time of local or remote computer or computers.
 
-#### Get-ADServersInfo
+#### Get-ADServerInfo
 Collect basic information about specified servers or all servers found in Active Directory. Collected information is useful for having overview of where they are, in which site, are they physical or virtual and on wich physical host, what systems are they running and what are they used for.
 
 #### Get-InstalledFeatures
