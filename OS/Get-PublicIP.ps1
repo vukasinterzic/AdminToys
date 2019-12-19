@@ -103,11 +103,3 @@ function Get-PublicIP {
 
     Write-Verbose -Message "End of function Get-PublicIP."
 }
-
-
-
-
-<#
-To Do:
-Add error detection
-#>
