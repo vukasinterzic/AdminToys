@@ -30,7 +30,7 @@ C:\PS> Get-Uptime -Computers COMPUTERNAME1 -UseCredentials user@domain.extension
 C:\PS> $ComputerList | Get-Uptime
 
 .LINK
-https://github.com/vukasinterzic/AdminToolBox
+https://github.com/vukasinterzic/AdminToys
 
 #>
 
