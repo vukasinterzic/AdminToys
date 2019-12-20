@@ -20,7 +20,7 @@ Text;
 Convert-TextToASCIIArt -Text "Hello World"
 
 .LINK
-https://github.com/vukasinterzic/AdminToolBox
+https://github.com/vukasinterzic/AdminToys
 
 #>
 
