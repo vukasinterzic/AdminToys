@@ -53,7 +53,7 @@ Get-ADServerInfo -ExportPath C:\export.csv
 Get-ADServerInfo -ImportPath $path -ImportLastFile
 
 .LINK
-https://github.com/vukasinterzic/AdminToolBox
+https://github.com/vukasinterzic/AdminToys
 
 #>
 
