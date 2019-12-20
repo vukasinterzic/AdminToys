@@ -34,7 +34,7 @@ C:\PS> Get-Module -Name ActiveDirectory | Get-ModuleHelp
 
 .LINK
 
-http://www.vukasinterzic.com
+https://github.com/vukasinterzic/AdminToys
 
 #>
 function Get-ModuleHelp {
@@ -44,7 +44,7 @@ function Get-ModuleHelp {
     (
         [Parameter(ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true)]
-        [string]$Module = "AdminToolBox"
+        [string]$Module = "AdminToys"
     )
 
     #get name of each command
