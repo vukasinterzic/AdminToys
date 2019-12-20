@@ -27,7 +27,7 @@ C:\PS> Get-NetAdapterInfo -ComputerName COMPUTERNAME1 -UseCredentials
 C:\PS> $ComputerList | % { Get-NetAdapterInfo -ComputerName $_ }
 
 .LINK
-https://github.com/vukasinterzic/AdminToolBox
+https://github.com/vukasinterzic/AdminToys
 
 #>
  
