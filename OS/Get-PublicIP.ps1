@@ -27,7 +27,7 @@ C:\PS> Get-PublicIP -ComputerName COMPUTERNAME1
 C:\PS> $ComputerList | Get-PublicIP
 
 .LINK
-https://github.com/vukasinterzic/AdminToolBox
+https://github.com/vukasinterzic/AdminToys
 
 #>
 
