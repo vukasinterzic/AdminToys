@@ -24,7 +24,7 @@ C:\PS> $IPAddressList | Get-GeoIPInfo
 C:\PS> $IPAddressList | % { Get-GeoIPInfo -IPs $_ }
 
 .LINK
-https://github.com/vukasinterzic/AdminToolBox
+https://github.com/vukasinterzic/AdminToys
 
 #>
 
