@@ -17,7 +17,7 @@ Melody name
 Get-ConsoleMusic -Melody Mario
 
 .LINK
-https://github.com/vukasinterzic/AdminToolBox
+https://github.com/vukasinterzic/AdminToys
 
 #>
 
