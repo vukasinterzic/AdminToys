@@ -41,7 +41,7 @@ C:\PS> computerlist.txt | Get-LocalAdmins
 
 .LINK
 
-https://github.com/vukasinterzic/AdminToolBox
+https://github.com/vukasinterzic/AdminToys
 
 #>
 
