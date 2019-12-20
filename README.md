@@ -1,7 +1,6 @@
-# AdminToolBox
-This is the place where I keep the code for my AdminToolBox PowerShell module.
+# AdminToys
 
-Module contains bunch of functions that are helping with everyday taks. Functions are saved in individual folders and they are fetched inside psm1 file.
+This module started as a collection of few functions to help with daily tasks. Module will grow over time and new useful functions will be added.
 
 Functions are designed in the way so they can be used individually, or as a part of a larger script. If you use variable $Credential to store credentials, you won't need to enter credentials for each function. Individual functions do not check for remote computer accessibility. You can do that once and then pass only accessible computers to individual functions. It is designed like this to avoid multiple checks. Results can be saved in new object, and then presented and sorted in various formats.
 
