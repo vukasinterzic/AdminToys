@@ -30,7 +30,7 @@ C:\PS> Get-InstalledFeatures -ComputerName COMPUTERNAME1, COMPUTERNAME2 | Format
 C:\PS> $ComputerList | % { Get-InstalledFeatures -ComputerName $_ }
 
 .LINK
-https://github.com/vukasinterzic/AdminToolBox
+https://github.com/vukasinterzic/AdminToys
 
 #>
 
