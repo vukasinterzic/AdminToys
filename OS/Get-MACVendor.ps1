@@ -24,7 +24,7 @@ C:\PS> Get-MACVendor -MACs 00-1C-42-98-DC-34
 C:\PS> $MAC | Get-MACVendor
 
 .LINK
-https://github.com/vukasinterzic/AdminToolBox
+https://github.com/vukasinterzic/AdminToys
 
 #>
 
