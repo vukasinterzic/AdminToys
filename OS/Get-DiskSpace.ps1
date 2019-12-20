@@ -36,7 +36,7 @@ C:\PS> $ComputerList | Get-DiskSpace | Format-Table -GroupBy ComputerName
 C:\PS> $ComputerList | % { Get-DiskSpace -ComputerName $_ }
 
 .LINK
-https://github.com/vukasinterzic/AdminToolBox
+https://github.com/vukasinterzic/AdminToys
 
 #>
 

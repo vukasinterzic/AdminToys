@@ -30,7 +30,7 @@ C:\PS> Get-DPMProtectedVMs -DPMServerName DPM
 C:\PS> Get-DPMProtectedVMs
 
 .LINK
-https://github.com/vukasinterzic/AdminToolBox
+https://github.com/vukasinterzic/AdminToys
 
 #>
 
