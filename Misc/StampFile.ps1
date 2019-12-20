@@ -25,7 +25,7 @@ StampFile -fileNames test.txt -KeepOriginal
 Get-ChildItem | where Name -like "test*" | StampFile
 
 .LINK
-https://github.com/vukasinterzic/AdminToolBox
+https://github.com/vukasinterzic/AdminToys
 
 #>
 
