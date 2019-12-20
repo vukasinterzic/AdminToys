@@ -15,7 +15,7 @@ Specify the path for the exported files.
 C:\PS> Invoke-Unzip -ZipFile c:\file.zip -ExportPath c:\exported
 
 .LINK
-https://github.com/vukasinterzic/AdminToolBox
+https://github.com/vukasinterzic/AdminToys
 
 #>
 
