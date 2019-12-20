@@ -37,7 +37,7 @@ Specifies record type. This script can create only A records therefore default v
 
 .LINK
 
-https://github.com/vukasinterzic/AdminToolBox
+https://github.com/vukasinterzic/AdminToys
 
 #>
 function New-DNSRecord {
