@@ -71,7 +71,7 @@ Converts your Text to
 ## Work in progress functions
 Get-SCOMObjectsInMaintenance, Get-SCOMMonitoredVMs, Get-SCOMNotMonitoredVMs, Get-SCOMAgentHealth, Get-SCOMEventsForVM, Get-DPMUnprotectedVMs, Get-DPMServerInfo (storage, network, jobs, cloud etc..), Get-iDRACInfo, Get-iLOInfo, Find-ADAccountLockoutSource
 
-Optional: Set-Elevation, Get-AccountFromSID, Get-SIDFromAccount, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-FirewallRules, Copy-MyItem, Install-ModuleFromGitHub, Update-ModuleFromGitHub, Get-ADGroupMembershipChanges, Get-ComputerBitlockerInfo, Set-PingFirewallRule, Get-Shares, Get-AdministrativeEvents, Write-ToEventLog, Get-ScheduledTask, SayThis, Export-ScriptsToModule, Copy-DownloadedModule  ...
+Optional: Set-Elevation, Get-AccountFromSID, Get-SIDFromAccount, Get-ShutDown, Get-LogOnLogOut, Get-InstalledSoftware, Get-FirewallRules, Copy-MyItem, Set-PingFirewallRule, Get-Shares, Get-AdministrativeEvents, Write-ToEventLog, Get-ScheduledTask, SayThis, Get-ADGroupMembershipChanges ...
 
 ## Planned changes
 #FIXME Rename module and repository and give it unique name
