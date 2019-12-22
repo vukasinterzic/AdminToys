@@ -80,4 +80,4 @@ Optional: Set-Elevation, Get-AccountFromSID, Get-SIDFromAccount, Get-ShutDown, G
 
 #TODO Add more functions
 
-#TODO Add guide on how to install module from github/gallery
+#TODO Add module to PowerShell Gallery
