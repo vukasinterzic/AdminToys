@@ -138,7 +138,7 @@ function Get-ADServerInfo {
         foreach ($Server in $Servers) {
 
             $i++
-            Write-Host -ForegroundColor DarkGray "Proceeding with server $($Server) - $i/$($Servers.Count)"
+            Write-Host -ForegroundColor DarkGray "Processing the server $($Server) - $i/$($Servers.Count)"
 
             if (Test-Connection $Server -Quiet -Count 1) {
 
@@ -152,6 +152,9 @@ function Get-ADServerInfo {
                 
                 Write-Verbose -Message "Getting server model..."
                 $ServerModel = Get-WmiObject -Class Win32_ComputerSystem -ComputerName $Server.DNSHostName -Credential $Credential | Select-Object -ExpandProperty Model
+
+                Write-Verbose -Message "Getting service tag..."
+                $ServiceTag = Get-WmiObject  -Class Win32_BIOS -ComputerName $Server.DNSHostName -Credential $Credential | Select-Object -ExpandProperty SerialNumber
                 
                 switch ($ServerModel) {
 
@@ -292,6 +295,7 @@ function Get-ADServerInfo {
                 $obj | Add-Member -MemberType NoteProperty -Name IP -Value $Server.IPv4Address
                 $obj | Add-Member -MemberType NoteProperty -Name OS -Value $Server.OperatingSystem
                 $obj | Add-Member -MemberType NoteProperty -Name Model -Value $ServerModel
+                $obj | Add-Member -MemberType NoteProperty -Name ServiceTag -Value $ServiceTag
                 $obj | Add-Member -MemberType NoteProperty -Name Host -Value $VMHost
                 $obj | Add-Member -MemberType NoteProperty -Name Site -Value $ServerSite
                 $obj | Add-Member -MemberType NoteProperty -Name Description -Value $Server.Description
@@ -306,7 +310,7 @@ function Get-ADServerInfo {
             
             }
 
-            Write-Verbose -Message "Processing of server $i/$($Servers.Count) completed at $(Get-Date -Format g)."
+            Write-Verbose -Message "Processing of the server $i/$($Servers.Count) completed at $(Get-Date -Format g)."
         }
 
         #Display Results
