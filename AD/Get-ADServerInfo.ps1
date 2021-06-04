@@ -153,8 +153,10 @@ function Get-ADServerInfo {
                 Write-Verbose -Message "Getting server model..."
                 $ServerModel = Get-WmiObject -Class Win32_ComputerSystem -ComputerName $Server.DNSHostName -Credential $Credential | Select-Object -ExpandProperty Model
 
-                Write-Verbose -Message "Getting service tag..."
-                $ServiceTag = Get-WmiObject  -Class Win32_BIOS -ComputerName $Server.DNSHostName -Credential $Credential | Select-Object -ExpandProperty SerialNumber
+                if ($ServerModel -notlike "Virtual Machine") {
+                    Write-Verbose -Message "Getting service tag..."
+                    $ServiceTag = Get-WmiObject  -Class Win32_BIOS -ComputerName $Server.DNSHostName -Credential $Credential | Select-Object -ExpandProperty SerialNumber
+                }
                 
                 switch ($ServerModel) {
 
