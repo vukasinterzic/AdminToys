@@ -94,7 +94,7 @@ function Get-GeoIPInfo {
 
         If ($ShowOnMap) {
 
-            Write-Verbose "Show On Map is requested. Opening Google Map Link in a separate browser tab."
+            Write-Verbose "Show On Map is requested. Opening Google Map Link in a separate browser tab (default browser)."
 
             Start-Process $GoogleMapsLink
 
