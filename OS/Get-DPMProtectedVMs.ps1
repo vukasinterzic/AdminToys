@@ -35,8 +35,9 @@ https://github.com/vukasinterzic/AdminToys
 #>
 
 Write-Verbose -Message "Script must run in console as Administrator, otherwise it will not connect to the DPM server."
-#Requires -RunAsAdministrator
-
+<#
+Requires -RunAsAdministrator
+#>
 
 function Get-DPMProtectedVMs {
     [CmdletBinding()]
