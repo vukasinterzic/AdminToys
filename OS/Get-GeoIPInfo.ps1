@@ -47,7 +47,6 @@ function Get-GeoIPInfo {
 
         Write-Verbose -Message "Public IP not entered. Getting the results for this computer IP ..."
         $IsCorrect = $true
-        $IsCorrect
 
     } else {
 
