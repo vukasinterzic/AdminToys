@@ -47,3 +47,6 @@ function Invoke-Unzip {
         }
     }
 }
+
+
+#FIXME Add default value for the path. It does not work if path is not provided
