@@ -26,6 +26,11 @@ function Invoke-Unzip {
         [string]$ExportPath
     )
 
+    if (!$ExportPath) {
+        Write-Verbose -Message "ExportPath not provided. Using same path as ZipFile."
+        $ExportPath = Get-Item $ZipFile | Select-Object -ExpandProperty DirectoryName
+    }
+
     if (Get-Command expand-archive) {
         $ErrorActionPreference = 'SilentlyContinue'
         Expand-Archive -Path $ZipFile -DestinationPath $ExportPath
@@ -49,4 +54,4 @@ function Invoke-Unzip {
 }
 
 
-#FIXME Add default value for the path. It does not work if path is not provided
+#FIXME Add Force parameter to enable overwriting existing files
