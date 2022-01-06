@@ -7,6 +7,8 @@ Currently work in progress scripts:
 
 - Get-AZVMInfo - get all info about Azure VMs
 
+- Get-AZVMNSG - get all info about Network Security Groups applied to VM.
+
 - Get-AZBackupInfo - get info about Azure backups, for all or individual VMs
 
 - Get-AZUpdateInfo - get info from Azure Update Management
