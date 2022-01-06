@@ -157,10 +157,10 @@ function Get-ADServerInfo {
                     $ServerSite = Get-WmiObject -Class Win32_ntdomain -ComputerName $Server.DNSHostName | Where-Object DomainName -Like $netBIOSName | Select-Object -ExpandProperty ClientSiteName
                     
                     Write-Verbose -Message "Getting server uptime..."
-                    $OSInfo = Get-WmiObject -Class Win32_OperatingSystem -ComputerName sbhg-azdc01 #$Server.DNSHostName
+                    $OSInfo = Get-WmiObject -Class Win32_OperatingSystem -ComputerName $Server.DNSHostName
                     $LastBootUpTime = [Management.ManagementDateTimeConverter]::ToDateTime($OSInfo.LastBootUpTime)
                     $Uptime = (Get-Date) - $LastBootUpTime
-                    $UptimeDisplay = "$($Uptime.Days)d:$($Uptime.Hours)h:$($Uptime.Minutes)m"
+                    $UptimeDisplay = "$($Uptime.Days)d:$($Uptime.Hours)h:$($Uptime.Minutes)m" #I don't use this
 
 
                     Write-Verbose -Message "Getting server model..."
