@@ -180,7 +180,7 @@ function Get-ADServerInfo {
                             $ValueName = "PhysicalHostName"
 
                             $wmi = Get-Wmiobject -list "StdRegProv" -namespace root\default -Computername $Server.DNSHostName
-                            if (-not ([string]::IsNullOrEmpty($wmi))) {$VMHost = $wmi.GetStringValue($HKLMdef, $KeyName, $ValueName).svalue} else {Write-Verbose -Message "VM Host not found."}
+                            if ($wmi) {$VMHost = $wmi.GetStringValue($HKLMdef, $KeyName, $ValueName).svalue} else {Write-Verbose -Message "VM Host not found."}
 
                             if (!$VMHost) { $VMHost = "Unknown Hyper-V or Azure Host" }
                         }
