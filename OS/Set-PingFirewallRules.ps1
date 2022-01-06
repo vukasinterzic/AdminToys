@@ -50,15 +50,31 @@ if (!$Server) {
 
 }
 
+Write-Verbose -Message "Creating CIM Session..."
+
 $CIMSession = New-CimSession -ComputerName $Server
 
 if ($Disable) {
+
+    Write-Verbose -Message "Disable parameter selected. Creating Block rules..."
 
     New-NetFirewallRule -DisplayName "Block inbound ICMPv4" -Direction Inbound -Protocol ICMPv4 -IcmpType 8 -Action Block -CimSession $CIMSession
     New-NetFirewallRule -DisplayName "Block inbound ICMPv6" -Direction Inbound -Protocol ICMPv6 -IcmpType 8 -Action Block -CimSession $CIMSession
 
 
 } else { #Allow part starts here 
+
+    Write-Verbose -Message "Enabling ping..."
+
+    if (Get-NetFirewallRule -DisplayName "Block inbound ICMPv4" -CimSession $CIMSession) {
+        Write-Verbose -Message "Block rule for IPv4 exists, removing ..."
+        Remove-NetFirewallRule -DisplayName "Block inbound ICMPv4" -CimSession $CIMSession
+    }
+
+    if (Get-NetFirewallRule -DisplayName "Block inbound ICMPv6" -CimSession $CIMSession) {
+        Write-Verbose -Message "Block rule for IPv6 exists, removing ..."
+        Remove-NetFirewallRule -DisplayName "Block inbound ICMPv6" -CimSession $CIMSession
+    }
 
     New-NetFirewallRule -DisplayName "Allow inbound ICMPv4" -Direction Inbound -Protocol ICMPv4 -IcmpType 8 -Action Allow -CimSession $CIMSession
     New-NetFirewallRule -DisplayName "Allow inbound ICMPv6" -Direction Inbound -Protocol ICMPv6 -IcmpType 8 -Action Allow -CimSession $CIMSession
@@ -69,7 +85,6 @@ if ($Disable) {
 } #End of Set-PingFirewallRules function
 
 
-
-#FIXME Add elevation check.
-#TODO Add option to re-open with admin rights
-#TODO replace Disable with finding and removing Enable rule. It is disabled by default, explicit disabling can make a mess
+#TODO Add elevation check for localhost
+#TODO Add option to re-open with elevated rights
+#FIXME replace Disable with finding and removing Enable rule. It is disabled by default, explicit disabling can make a mess and block rule stays and therefore keeps blocking it
