@@ -45,7 +45,7 @@ function Get-AZVMInfo {
         [Parameter(Mandatory = $false,
         ValueFromPipeline = $true,
         ValueFromPipelineByPropertyName = $true)]
-        [string]$Subscription
+        [string]$SubscriptionName
     
     )
 
@@ -58,32 +58,47 @@ function Get-AZVMInfo {
 
     #Connect-AzAccount
 
-    #$VMName = 'SBHG-AZMAN'
+    if (!$SubscriptionName) {
 
-    if (!$Subscription) {
+        Write-Verbose -Message "SubscriptionName not specified. Searching for VM in all Subscriptions..."
 
         $Subscriptions = Get-AzSubscription | Where-Object Name -notlike 'Access to Azure Active Directory'
 
-        foreach ($Subscription in $Subscriptions) {
-        
-            Write-Verbose -Message 'Searching for VM in all subscriptions...'
+    } else {
 
-            Write-Verbose -Message 'Selecting Subscription $($Subscription.Name)... '
-
-            Get-AzSubscription -SubscriptionName $Subscription.Name | Set-AZContext
-
-            if (Get-AzVM -Name $VMName) { 
-                Write-Verbose -Message "VM Found in Subscription $($Subscription.Name)!"
-                Write-Verbose -Message "Getting VM and Subscription info..."
-                $VMinfo = Get-AZVM -Name $VMName
-                $SubscriptionInfo = Get-AzSubscription -SubscriptionName $Subscription.Name
-                
-                Write-Verbose -Message "Breaking the ForeEach loop..."
-                break
-            }
-            
-        }
+        $Subscriptions = Get-AzSubscription -SubscriptionName $SubscriptionName
 
     }
+
+    foreach ($Subscription in $Subscriptions) {
+    
+        Write-Verbose -Message "Selecting Subscription $($Subscription.Name)... "
+
+        Get-AzSubscription -SubscriptionName $Subscription.Name | Set-AZContext
+
+        if (Get-AzVM -Name $VMName) { 
+
+            Write-Verbose -Message "VM Found in Subscription $($Subscription.Name)!"
+            Write-Verbose -Message "Getting VM and Subscription info..."
+            $VMinfo = Get-AZVM -Name $VMName
+            $SubscriptionInfo = Get-AzSubscription -SubscriptionName $Subscription.Name
+            
+            Write-Verbose -Message "Breaking the ForeEach loop..."
+            break
+
+        } else {
+        
+            Write-Verbose -Message "VM with name $VMName not found in subscription $($Subscription.Name)"
+        
+        }
+        
+    }
+
+
+
+
+
+
+
 
 }
