@@ -12,7 +12,7 @@
     RootModule        = 'AdminToys.psm1'
 
     # Version number of this module.
-    ModuleVersion     = '1.2.0'
+    ModuleVersion     = '1.2.1'
 
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -27,7 +27,7 @@
     CompanyName       = 'vukasinterzic.com'
 
     # Copyright statement for this module
-    Copyright         = '2018-2019 Vukasin Terzic'
+    Copyright         = '2018-2022 Vukasin Terzic'
 
     # Description of the functionality provided by this module
     Description       = 'This module contains several functions that helps admins with day to day tasks in different areas.'
@@ -69,7 +69,7 @@
     # NestedModules = @()
 
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = @('Get-ModuleHelp', 'Get-DiskSpace', 'New-DNSRecord', 'Get-LocalAdmins', 'Get-ADServerInfo', 'StampFile', 'Get-Uptime', 'Convert-TextToASCIIArt', 'Get-PublicIP', 'Get-GeoIPInfo', 'Get-InstalledFeatures', 'Get-ConsoleMusic', 'Invoke-Unzip', 'Get-MACVendor', 'Get-NetAdapterInfo', 'Get-DPMProtectedVMs', 'Test-Elevation')
+    FunctionsToExport = @('Get-ModuleHelp', 'Get-DiskSpace', 'New-DNSRecord', 'Get-LocalAdmins', 'Get-ADServerInfo', 'StampFile', 'Get-Uptime', 'Convert-TextToASCIIArt', 'Get-PublicIP', 'Get-GeoIPInfo', 'Get-InstalledFeatures', 'Get-ConsoleMusic', 'Invoke-Unzip', 'Get-MACVendor', 'Get-NetAdapterInfo', 'Get-DPMProtectedVMs', 'Test-Elevation', 'Set-PingFirewallRules')
 
     # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
     # CmdletsToExport   = @()
