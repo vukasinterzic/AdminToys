@@ -102,7 +102,7 @@ function Get-AZVMInfo {
 
     #Get OS, domain, azure user, ip, public ip
 
-    #get network security group rules
+    #get backup info
 
 
     $global:FullVMInfo = @()
