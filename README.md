@@ -80,4 +80,4 @@ Optional: Set-Elevation, Get-AccountFromSID, Get-SIDFromAccount, Get-ShutDown, G
 
 #TODO Add more functions
 
-#TODO Add module to PowerShell Gallery
+#TODO Create Azure DevOps workflow to test, update and add module to PowerShell Gallery
