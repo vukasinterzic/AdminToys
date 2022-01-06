@@ -57,6 +57,9 @@ Zip file extraction by attempting 3 methods, in case prerequisites are not met.
 #### Get-ConsoleMusic
 Fun little function that plays songs directly from console. Currently available melodies: Super Mario, Tetris, Mission Impossible, Star Wars.
 
+#### Set-PingFirewallRules
+Enables TCP IPv4 and IPv6 ports on remote or local computer so you can use PING. It can also create block rules to disable it.
+
 #### Convert-TextToASCIIArt
 Converts your Text to
 ```
