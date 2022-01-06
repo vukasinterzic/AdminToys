@@ -87,4 +87,5 @@ if ($Disable) {
 
 #TODO Add elevation check for localhost
 #TODO Add option to re-open with elevated rights
-#FIXME replace Disable with finding and removing Enable rule. It is disabled by default, explicit disabling can make a mess and block rule stays and therefore keeps blocking it
+#FIXME Replace creating block rules in Disable with finding existing Allow rules and removing them.
+#TODO Add option to work with credentials for remote computer
