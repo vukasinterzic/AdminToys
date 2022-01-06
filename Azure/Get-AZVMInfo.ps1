@@ -52,6 +52,7 @@ function Get-AZVMInfo {
 
     #FIXME Add check for module
     #FIXME Add check for Azure authentication, and initiate if missing
+    #FIXME After Function is completed, add it to module and description to README file.
 
     #Connecting to Azure (this is temporary):
 
