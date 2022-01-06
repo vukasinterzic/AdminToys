@@ -94,9 +94,39 @@ function Get-AZVMInfo {
         
     }
 
+    
+
+    #Get Disks + info
+
+    #Get AZ Agent info
+
+    #Get OS, domain, azure user, ip, public ip
+
+    #get network security group rules
 
 
+    $global:FullVMInfo = @()
 
+    #Create custom object with all collected properties
+    $obj = New-Object psobject
+    $obj | Add-Member -MemberType NoteProperty -Name Name -Value $VMInfo.Name
+    $obj | Add-Member -MemberType NoteProperty -Name ResourceGroupName -Value $VMInfo.ResourceGroupName
+    $obj | Add-Member -MemberType NoteProperty -Name Location -Value $VMInfo.Location
+    $obj | Add-Member -MemberType NoteProperty -Name Tags -Value $VMInfo.Tags
+    $obj | Add-Member -MemberType NoteProperty -Name Subscription -Value $SubscriptionInfo.Name
+    $obj | Add-Member -MemberType NoteProperty -Name -Value
+    $obj | Add-Member -MemberType NoteProperty -Name -Value
+    $obj | Add-Member -MemberType NoteProperty -Name -Value
+    $obj | Add-Member -MemberType NoteProperty -Name -Value
+    $obj | Add-Member -MemberType NoteProperty -Name -Value
+    $obj | Add-Member -MemberType NoteProperty -Name -Value
+    $obj | Add-Member -MemberType NoteProperty -Name -Value
+    $obj | Add-Member -MemberType NoteProperty -Name -Value
+    $obj | Add-Member -MemberType NoteProperty -Name -Value
+
+
+    Write-Verbose -Message "Server $($Server.Name) is online and collected information was added to list of online servers."
+    $global:FullVMInfo += $obj
 
 
 
