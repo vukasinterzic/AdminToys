@@ -58,6 +58,10 @@ function Get-AZVMInfo {
 
     #Connect-AzAccount
 
+
+
+
+
     if (!$SubscriptionName) {
 
         Write-Verbose -Message "SubscriptionName not specified. Searching for VM in all Subscriptions..."
@@ -103,6 +107,10 @@ function Get-AZVMInfo {
     #Get OS, domain, azure user, ip, public ip
 
     #get backup info
+
+    #get Description Tag if Exists
+
+    #get Azure Update management configuration
 
 
     $global:FullVMInfo = @()
