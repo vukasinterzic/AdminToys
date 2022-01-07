@@ -122,6 +122,7 @@ function Get-AZVMInfo {
     $obj | Add-Member -MemberType NoteProperty -Name Location -Value $VMInfo.Location
     $obj | Add-Member -MemberType NoteProperty -Name Tags -Value $VMInfo.Tags
     $obj | Add-Member -MemberType NoteProperty -Name Subscription -Value $SubscriptionInfo.Name
+    <#$obj | Add-Member -MemberType NoteProperty -Name -Value
     $obj | Add-Member -MemberType NoteProperty -Name -Value
     $obj | Add-Member -MemberType NoteProperty -Name -Value
     $obj | Add-Member -MemberType NoteProperty -Name -Value
@@ -130,8 +131,7 @@ function Get-AZVMInfo {
     $obj | Add-Member -MemberType NoteProperty -Name -Value
     $obj | Add-Member -MemberType NoteProperty -Name -Value
     $obj | Add-Member -MemberType NoteProperty -Name -Value
-    $obj | Add-Member -MemberType NoteProperty -Name -Value
-
+#>
 
     Write-Verbose -Message "Server $($Server.Name) is online and collected information was added to list of online servers."
     $global:FullVMInfo += $obj
