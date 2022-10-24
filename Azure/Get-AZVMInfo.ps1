@@ -54,7 +54,12 @@ function Get-AZVMInfo {
     #FIXME Add check for Azure authentication, and initiate if missing
     #FIXME After Function is completed, add it to module and description to README file.
     #TODO Add switch parameter to export to CSV file
+    #TODO Check AZ Agent Status
+    #TODO Check Azure Update Management Status
     #FIXME Encount for multiple NICs, IPs and Subnets
+
+
+    $global:FullVMInfo = @()
 
 
     if (!$SubscriptionName) {
@@ -128,49 +133,39 @@ function Get-AZVMInfo {
                 $VMBackupStatus = "Disabled"
             }
 
-            
+            <#
             Write-Verbose -Message "Breaking the ForeEach loop..."
             break
+            #>
+                    
+            #Create custom object with all collected properties
+            $obj = New-Object psobject
+            $obj | Add-Member -MemberType NoteProperty -Name Subscription -Value $SubscriptionInfo.Name
+            $obj | Add-Member -MemberType NoteProperty -Name Location -Value $VMInfo.Location
+            $obj | Add-Member -MemberType NoteProperty -Name AzureName -Value $VMInfo.Name
+            $obj | Add-Member -MemberType NoteProperty -Name WindowsName -Value $VMinfo.OsProfile.ComputerName
+            $obj | Add-Member -MemberType NoteProperty -Name ResourceGroupName -Value $VMInfo.ResourceGroupName
+            $obj | Add-Member -MemberType NoteProperty -Name Description -Value $VMinfo.Tags.Description
+            $obj | Add-Member -MemberType NoteProperty -Name Environment -Value $VMinfo.Tags.Environment
+            $obj | Add-Member -MemberType NoteProperty -Name SLA -Value $VMinfo.Tags.SLA
+            $obj | Add-Member -MemberType NoteProperty -Name Contact -Value $VMinfo.Tags.'Business-Contact'
+            $obj | Add-Member -MemberType NoteProperty -Name OS -Value "$($VMinfo.StorageProfile.ImageReference.Offer) $($VMinfo.StorageProfile.ImageReference.Sku)"
+            $obj | Add-Member -MemberType NoteProperty -Name License -Value $VMLicenseType
+            $obj | Add-Member -MemberType NoteProperty -Name Size -Value $VMinfo.HardwareProfile.VmSize
+            $obj | Add-Member -MemberType NoteProperty -Name OSDiskSize -Value $VMinfo.StorageProfile.OsDisk.DiskSizeGB
+            $obj | Add-Member -MemberType NoteProperty -Name OSDiskType -Value $VMinfo.StorageProfile.OsDisk.ManagedDisk.StorageAccountType
+            $obj | Add-Member -MemberType NoteProperty -Name NumberOfDataDisks -Value $VMinfo.StorageProfile.DataDisks.Count
+            $obj | Add-Member -MemberType NoteProperty -Name PrivateIP -Value $VMIPConfig.PrivateIpAddress
+            $obj | Add-Member -MemberType NoteProperty -Name vNET -Value $VMIPConfig.Subnet.Id.Split("/")[8]
+            $obj | Add-Member -MemberType NoteProperty -Name Subnet -Value $VMIPConfig.Subnet.Id.Split("/")[10]
+            $obj | Add-Member -MemberType NoteProperty -Name IPAllocation -Value $VMIPConfig.PrivateIpAllocationMethod
+            $obj | Add-Member -MemberType NoteProperty -Name PublicIP -Value $VMPublicIP
+            $obj | Add-Member -MemberType NoteProperty -Name AzureBackup -Value $VMBackupStatus
 
-        } else {
-        
-            Write-Verbose -Message "VM with name $VMName not found in subscription $($Subscription.Name)"
-        
-        }
-        
-    }
+            $global:FullVMInfo += $obj
 
-    #Get AZ Agent info
+        } #end of VMs Foreach loop
+    
+    } #end of Subscriptions Foreach loop
 
-    #get Azure Update management configuration
-
-
-    $global:FullVMInfo = @()
-
-    #Create custom object with all collected properties
-    $obj = New-Object psobject
-    $obj | Add-Member -MemberType NoteProperty -Name Subscription -Value $SubscriptionInfo.Name
-    $obj | Add-Member -MemberType NoteProperty -Name Location -Value $VMInfo.Location
-    $obj | Add-Member -MemberType NoteProperty -Name AzureName -Value $VMInfo.Name
-    $obj | Add-Member -MemberType NoteProperty -Name WindowsName -Value $VMinfo.OsProfile.ComputerName
-    $obj | Add-Member -MemberType NoteProperty -Name ResourceGroupName -Value $VMInfo.ResourceGroupName
-    $obj | Add-Member -MemberType NoteProperty -Name Description -Value $VMinfo.Tags.Description
-    $obj | Add-Member -MemberType NoteProperty -Name Environment -Value $VMinfo.Tags.Environment
-    $obj | Add-Member -MemberType NoteProperty -Name SLA -Value $VMinfo.Tags.SLA
-    $obj | Add-Member -MemberType NoteProperty -Name Contact -Value $VMinfo.Tags.'Business-Contact'
-    $obj | Add-Member -MemberType NoteProperty -Name OS -Value "$($VMinfo.StorageProfile.ImageReference.Offer) $($VMinfo.StorageProfile.ImageReference.Sku)"
-    $obj | Add-Member -MemberType NoteProperty -Name License -Value $VMLicenseType
-    $obj | Add-Member -MemberType NoteProperty -Name Size -Value $VMinfo.HardwareProfile.VmSize
-    $obj | Add-Member -MemberType NoteProperty -Name OSDiskSize -Value $VMinfo.StorageProfile.OsDisk.DiskSizeGB
-    $obj | Add-Member -MemberType NoteProperty -Name OSDiskType -Value $VMinfo.StorageProfile.OsDisk.ManagedDisk.StorageAccountType
-    $obj | Add-Member -MemberType NoteProperty -Name NumberOfDataDisks -Value $VMinfo.StorageProfile.DataDisks.Count
-    $obj | Add-Member -MemberType NoteProperty -Name PrivateIP -Value $VMIPConfig.PrivateIpAddress
-    $obj | Add-Member -MemberType NoteProperty -Name vNET -Value $VMIPConfig.Subnet.Id.Split("/")[8]
-    $obj | Add-Member -MemberType NoteProperty -Name Subnet -Value $VMIPConfig.Subnet.Id.Split("/") | Select-Object -Last 1
-    $obj | Add-Member -MemberType NoteProperty -Name IPAllocation -Value $VMIPConfig.PrivateIpAllocationMethod
-    $obj | Add-Member -MemberType NoteProperty -Name PublicIP -Value $VMPublicIP
-    $obj | Add-Member -MemberType NoteProperty -Name AzureBackup -Value $VMBackupStatus
-
-    $global:FullVMInfo += $obj
-
-}
+} #End of Function
