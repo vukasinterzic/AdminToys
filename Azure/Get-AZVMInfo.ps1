@@ -37,7 +37,7 @@ function Get-AZVMInfo {
 
     param 
     (
-        [Parameter(Mandatory = $true,
+        [Parameter(Mandatory = $false,
         ValueFromPipeline = $true,
         ValueFromPipelineByPropertyName = $true)]
         [string]$VMName,
@@ -55,7 +55,7 @@ function Get-AZVMInfo {
     #FIXME After Function is completed, add it to module and description to README file.
     #TODO Add switch parameter to export to CSV file
     #TODO Add switch parameter -AllVms to get info about all VMs in Subscription
-    #TODO Add switch parameter -AllSubs to scan and loop all subscriptions
+
 
     #Connecting to Azure (this is temporary):
 
@@ -77,34 +77,39 @@ function Get-AZVMInfo {
 
     }
 
+    <#
+    Write-Verbose -Message "Getting the list of Backup Vaults..."
+    $BackupVaults = Get-AzRecoveryServicesVault
+    #>
+
+
     foreach ($Subscription in $Subscriptions) {
     
         Write-Verbose -Message "Selecting Subscription $($Subscription.Name)... "
 
         Get-AzSubscription -SubscriptionName $Subscription.Name | Set-AZContext
 
-        if (Get-AzVM -Name $VMName) { 
+        if (!$VMName) {
+            
+            $VMs = Get-AzVM
+
+        } else {
+            $VMs = Get-AzVM -Name $VMName
+        }
+        
+        foreach ($VM in $VMs) {
 
             Write-Verbose -Message "VM Found in Subscription $($Subscription.Name)!"
             Write-Verbose -Message "Getting VM and Subscription info..."
-            $VMinfo = Get-AZVM -Name $VMName
+            $VMinfo = Get-AZVM -Name $VM.Name -ResourceGroupName $VM.ResourceGroupName
             $SubscriptionInfo = Get-AzSubscription -SubscriptionName $Subscription.Name
-            $VMDescription = $VMinfo.Tags.Description
-            $VMLocation = $VMinfo.Location
-            $VMEnvironment = $VMinfo.Tags.Environment
-            $VMResourceGroup = $VMinfo.ResourceGroupName
-            $VMSize = $VMinfo.HardwareProfile.VmSize
-            $VMWindowsName = $VMinfo.OsProfile.ComputerName
-            $VMOSVersion = $VMinfo.StorageProfile.ImageReference.Offer
-            $VMOSSku = $VMinfo.StorageProfile.ImageReference.Sku
-            $VMOSDiskSize = $VMinfo.StorageProfile.OsDisk.DiskSizeGB
-            $VMOSDiskType = $VMinfo.StorageProfile.OsDisk.ManagedDisk.StorageAccountType
-            $VMDataDiskCount = $VMinfo.StorageProfile.DataDisks.Count
-            <#$VMDataDiskSize = $VMinfo.StorageProfile.DataDisks.DiskSizeGB
+
+            <#
+            $VMDataDiskSize = $VMinfo.StorageProfile.DataDisks.DiskSizeGB
             $VMDataDiskType = $VMinfo.StorageProfile.DataDisks.ManagedDisk.StorageAccountType
             $VMNetworkInterface = $VMinfo.NetworkProfile.NetworkInterfaces[0].Id
-            #>
             $VMNetworkInterfaceName = $VMinfo.NetworkProfile.NetworkInterfaces[0].Id.Split('/')[-1]
+            #>
 
             $NetworkProfile = $VMInfo.NetworkProfile.NetworkInterfaces.Id.Split("/") | Select-Object -Last 1
 
@@ -115,6 +120,22 @@ function Get-AZVMInfo {
             } else {
                 $VMPublicIP = "None"
             }
+
+            if ($VMinfo.LicenseType) {
+                $VMLicenseType = "$($VMinfo.LicenseType) (Azure Hybrid Use Benefit)"
+            } else {
+                $VMLicenseType = "Azure License"
+            }
+
+
+            $recoveryVaultInfo = Get-AzRecoveryServicesBackupStatus -Name $VMinfo.Name -ResourceGroupName $VMinfo.ResourceGroupName -Type 'AzureVM'
+
+            if ($recoveryVaultInfo.BackedUp -eq $true) {
+                $VMBackupStatus = "Enabled"
+            } else {
+                $VMBackupStatus = "Disabled"
+            }
+
             
             Write-Verbose -Message "Breaking the ForeEach loop..."
             break
@@ -129,15 +150,7 @@ function Get-AZVMInfo {
 
     
 
-    #Get Disks + info
-
     #Get AZ Agent info
-
-    #Get OS, domain, azure user, ip, public ip, vnet, subnet
-
-    #get backup info
-
-    #get Description Tag if Exists
 
     #get Azure Update management configuration
 
@@ -148,26 +161,28 @@ function Get-AZVMInfo {
 
     #Create custom object with all collected properties
     $obj = New-Object psobject
-    $obj | Add-Member -MemberType NoteProperty -Name Name -Value $VMInfo.Name
-    $obj | Add-Member -MemberType NoteProperty -Name ResourceGroupName -Value $VMInfo.ResourceGroupName
-    $obj | Add-Member -MemberType NoteProperty -Name Location -Value $VMInfo.Location
-    $obj | Add-Member -MemberType NoteProperty -Name Tags -Value $VMInfo.Tags
     $obj | Add-Member -MemberType NoteProperty -Name Subscription -Value $SubscriptionInfo.Name
-    <#$obj | Add-Member -MemberType NoteProperty -Name -Value
-    $obj | Add-Member -MemberType NoteProperty -Name -Value
-    $obj | Add-Member -MemberType NoteProperty -Name -Value
-    $obj | Add-Member -MemberType NoteProperty -Name -Value
-    $obj | Add-Member -MemberType NoteProperty -Name -Value
-    $obj | Add-Member -MemberType NoteProperty -Name -Value
-    $obj | Add-Member -MemberType NoteProperty -Name -Value
-    $obj | Add-Member -MemberType NoteProperty -Name -Value
-    $obj | Add-Member -MemberType NoteProperty -Name -Value
-#>
+    $obj | Add-Member -MemberType NoteProperty -Name Location -Value $VMInfo.Location
+    $obj | Add-Member -MemberType NoteProperty -Name AzureName -Value $VMInfo.Name
+    $obj | Add-Member -MemberType NoteProperty -Name WindowsName -Value $VMinfo.OsProfile.ComputerName
+    $obj | Add-Member -MemberType NoteProperty -Name ResourceGroupName -Value $VMInfo.ResourceGroupName
+    $obj | Add-Member -MemberType NoteProperty -Name Description -Value $VMinfo.Tags.Description
+    $obj | Add-Member -MemberType NoteProperty -Name Environment -Value $VMinfo.Tags.Environment
+    $obj | Add-Member -MemberType NoteProperty -Name SLA -Value $VMinfo.Tags.SLA
+    $obj | Add-Member -MemberType NoteProperty -Name Contact -Value $VMinfo.Tags.'Business-Contact'
+    $obj | Add-Member -MemberType NoteProperty -Name OS -Value "$($VMinfo.StorageProfile.ImageReference.Offer) $($VMinfo.StorageProfile.ImageReference.Sku)"
+    $obj | Add-Member -MemberType NoteProperty -Name License -Value $VMLicenseType
+    $obj | Add-Member -MemberType NoteProperty -Name Size -Value $VMinfo.HardwareProfile.VmSize
+    $obj | Add-Member -MemberType NoteProperty -Name OSDiskSize -Value $VMinfo.StorageProfile.OsDisk.DiskSizeGB
+    $obj | Add-Member -MemberType NoteProperty -Name OSDiskType -Value $VMinfo.StorageProfile.OsDisk.ManagedDisk.StorageAccountType
+    $obj | Add-Member -MemberType NoteProperty -Name NumberOfDataDisks -Value $VMinfo.StorageProfile.DataDisks.Count
+    $obj | Add-Member -MemberType NoteProperty -Name PrivateIP -Value $VMIPConfig.PrivateIpAddress
+    $obj | Add-Member -MemberType NoteProperty -Name vNET -Value $VMIPConfig.Subnet.Id.Split("/")[8]
+    $obj | Add-Member -MemberType NoteProperty -Name Subnet -Value $VMIPConfig.Subnet.Id.Split("/") | Select-Object -Last 1
+    $obj | Add-Member -MemberType NoteProperty -Name IPAllocation -Value $VMIPConfig.PrivateIpAllocationMethod
+    $obj | Add-Member -MemberType NoteProperty -Name PublicIP -Value $VMPublicIP
+    $obj | Add-Member -MemberType NoteProperty -Name AzureBackup -Value $VMBackupStatus
 
-    Write-Verbose -Message "Server $($Server.Name) is online and collected information was added to list of online servers."
     $global:FullVMInfo += $obj
-
-
-
 
 }
