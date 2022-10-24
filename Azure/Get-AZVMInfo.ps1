@@ -53,6 +53,9 @@ function Get-AZVMInfo {
     #FIXME Add check for module
     #FIXME Add check for Azure authentication, and initiate if missing
     #FIXME After Function is completed, add it to module and description to README file.
+    #TODO Add switch parameter to export to CSV file
+    #TODO Add switch parameter -AllVms to get info about all VMs in Subscription
+    #TODO Add switch parameter -AllSubs to scan all subscriptions
 
     #Connecting to Azure (this is temporary):
 
@@ -86,6 +89,28 @@ function Get-AZVMInfo {
             Write-Verbose -Message "Getting VM and Subscription info..."
             $VMinfo = Get-AZVM -Name $VMName
             $SubscriptionInfo = Get-AzSubscription -SubscriptionName $Subscription.Name
+            $VMDescription = $VMinfo.Tags.Description
+            $VMLocation = $VMinfo.Location
+            $VMEnvironment = $VMinfo.Tags.Environment
+            $VMResourceGroup = $VMinfo.ResourceGroupName
+            $VMSize = $VMinfo.HardwareProfile.VmSize
+            $VMWindowsName = $VMinfo.OsProfile.ComputerName
+            $VMOS = $VMinfo.StorageProfile.OsDisk.OsType
+            $VMOSDiskSize = $VMinfo.StorageProfile.OsDisk.DiskSizeGB
+            $VMOSDiskType = $VMinfo.StorageProfile.OsDisk.ManagedDisk.StorageAccountType
+            $VMDataDiskCount = $VMinfo.StorageProfile.DataDisks.Count
+            <#$VMDataDiskSize = $VMinfo.StorageProfile.DataDisks.DiskSizeGB
+            $VMDataDiskType = $VMinfo.StorageProfile.DataDisks.ManagedDisk.StorageAccountType
+            $VMNetworkInterface = $VMinfo.NetworkProfile.NetworkInterfaces[0].Id
+            #>
+            $VMNetworkInterfaceName = $VMinfo.NetworkProfile.NetworkInterfaces[0].Id.Split('/')[-1]
+
+            $NetworkProfile = $VMInfo.NetworkProfile.NetworkInterfaces.Id.Split("/") | Select -Last 1
+
+            $VMIPConfig = Get-AzNetworkInterface -Name $NetworkProfile | Select-Object -ExpandProperty IpConfigurations
+
+            $VMIPAddress = $VMIPConfig.PrivateIpAddress
+
             
             Write-Verbose -Message "Breaking the ForeEach loop..."
             break
@@ -104,13 +129,15 @@ function Get-AZVMInfo {
 
     #Get AZ Agent info
 
-    #Get OS, domain, azure user, ip, public ip
+    #Get OS, domain, azure user, ip, public ip, vnet, subnet
 
     #get backup info
 
     #get Description Tag if Exists
 
     #get Azure Update management configuration
+
+    
 
 
     $global:FullVMInfo = @()
