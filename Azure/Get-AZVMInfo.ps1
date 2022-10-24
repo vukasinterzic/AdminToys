@@ -55,7 +55,7 @@ function Get-AZVMInfo {
     #FIXME After Function is completed, add it to module and description to README file.
     #TODO Add switch parameter to export to CSV file
     #TODO Add switch parameter -AllVms to get info about all VMs in Subscription
-    #TODO Add switch parameter -AllSubs to scan all subscriptions
+    #TODO Add switch parameter -AllSubs to scan and loop all subscriptions
 
     #Connecting to Azure (this is temporary):
 
@@ -95,7 +95,8 @@ function Get-AZVMInfo {
             $VMResourceGroup = $VMinfo.ResourceGroupName
             $VMSize = $VMinfo.HardwareProfile.VmSize
             $VMWindowsName = $VMinfo.OsProfile.ComputerName
-            $VMOS = $VMinfo.StorageProfile.OsDisk.OsType
+            $VMOSVersion = $VMinfo.StorageProfile.ImageReference.Offer
+            $VMOSSku = $VMinfo.StorageProfile.ImageReference.Sku
             $VMOSDiskSize = $VMinfo.StorageProfile.OsDisk.DiskSizeGB
             $VMOSDiskType = $VMinfo.StorageProfile.OsDisk.ManagedDisk.StorageAccountType
             $VMDataDiskCount = $VMinfo.StorageProfile.DataDisks.Count
@@ -105,12 +106,15 @@ function Get-AZVMInfo {
             #>
             $VMNetworkInterfaceName = $VMinfo.NetworkProfile.NetworkInterfaces[0].Id.Split('/')[-1]
 
-            $NetworkProfile = $VMInfo.NetworkProfile.NetworkInterfaces.Id.Split("/") | Select -Last 1
+            $NetworkProfile = $VMInfo.NetworkProfile.NetworkInterfaces.Id.Split("/") | Select-Object -Last 1
 
             $VMIPConfig = Get-AzNetworkInterface -Name $NetworkProfile | Select-Object -ExpandProperty IpConfigurations
 
-            $VMIPAddress = $VMIPConfig.PrivateIpAddress
-
+            if ($VMIPConfig.PublicIpAddress) {
+                $VMPublicIP = (Get-AzPublicIpAddress -Name $($VMIPConfig.PublicIpAddress.Id.Split("/") | Select-Object -Last 1)).IpAddress
+            } else {
+                $VMPublicIP = "None"
+            }
             
             Write-Verbose -Message "Breaking the ForeEach loop..."
             break
