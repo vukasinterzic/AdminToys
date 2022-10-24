@@ -22,7 +22,7 @@ Specify export file path, including file name.
 .OUTPUTS
 
 .EXAMPLE
-C:\PS> Get-AZVMInfo -VMName AZVM1
+C:\PS> Get-AZVMInfo
 
 .EXAMPLE
 C:\PS> Get-AZVMInfo -VMName AZVM1 -Subscription AZSUB2
@@ -54,15 +54,7 @@ function Get-AZVMInfo {
     #FIXME Add check for Azure authentication, and initiate if missing
     #FIXME After Function is completed, add it to module and description to README file.
     #TODO Add switch parameter to export to CSV file
-    #TODO Add switch parameter -AllVms to get info about all VMs in Subscription
-
-
-    #Connecting to Azure (this is temporary):
-
-    #Connect-AzAccount
-
-
-
+    #FIXME Encount for multiple NICs, IPs and Subnets
 
 
     if (!$SubscriptionName) {
@@ -148,13 +140,9 @@ function Get-AZVMInfo {
         
     }
 
-    
-
     #Get AZ Agent info
 
     #get Azure Update management configuration
-
-    
 
 
     $global:FullVMInfo = @()
